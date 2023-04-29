@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, Model } from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 
 
 const ProductSchema = new Schema({
@@ -59,6 +59,6 @@ const ProductSchema = new Schema({
 
 
 // TODO: Crear indice de Mongo
-const Product = mongoose.models.Product || model( 'Product', ProductSchema );
+const ProductModel = models.Product || model( 'Product',  ProductSchema )
 
-export default Product
+export default ProductModel;
