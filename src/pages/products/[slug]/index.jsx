@@ -9,17 +9,17 @@ import {
 } from '@mui/material';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
+// Database
+import { dbProducts } from '@/database';
 // Components
 import {
   ItemCounter,
   ProductSizeSelector,
   ProductSlideshow
 } from '@/components';
-// Hooks
-import { useProducts } from '@/hooks';
 
 
-const ProductPage = () => {
+const ProductPage = ({ product }) => {
   /*
   const { query } = useRouter();
   const { products: product, isLoading } = useProducts( `/products/${ query.slug }` );
@@ -98,6 +98,25 @@ const ProductPage = () => {
       </Grid>
     </ShopLayout>
   );
+}
+
+export const getServerSideProps = async ({ params }) => {
+  const product = await dbProducts.getProductBySlug( params.slug ) || {};
+
+  if ( !product ) {
+    return {
+      redirect: {
+        description: '/',
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {
+      product
+    },
+  }
 }
 
 export default ProductPage;
