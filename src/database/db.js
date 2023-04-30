@@ -30,9 +30,11 @@ export const connect = async() => {
 
     await mongoose.connect( process.env.MONGO_CNN_LOCAL || '');
     mongoConnection.isConnected = 1;
+
     console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Database ${ 'ONLINE'.green }` );
 
   } catch ( error ) {
+    await mongoose.disconnect();
     console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgRed }: ${ error }` );
   }
 }
@@ -49,6 +51,7 @@ export const disconnect = async() => {
     console.log( `${ '[CONFIG.DATABASE.DISCONNECT]'.bgGreen }: Desconectado de MongoDB` );
 
   } catch ( error ) {
+    await mongoose.disconnect();
     console.log( `${ '[CONFIG.DATABASE.DISCONNECT]'.bgRed }: ${ error }` );
   }
 }

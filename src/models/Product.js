@@ -56,6 +56,10 @@ const ProductSchema = new Schema({
   timestamps: true
 });
 
+ProductSchema.index({
+  title: 'text',
+  tags: 'text'
+});
 
 
 // TODO: Crear indice de Mongo
