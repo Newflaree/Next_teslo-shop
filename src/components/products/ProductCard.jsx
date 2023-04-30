@@ -15,6 +15,7 @@ import {
 
 export const ProductCard = ({ product }) => {
   const [ isHovered, setIsHovered ] = useState( false );
+  const [ isImageLoaded, setIsImageLoaded ] = useState( false );
 
   const productImage = useMemo( () => {
     return isHovered
@@ -42,6 +43,7 @@ export const ProductCard = ({ product }) => {
               <CardMedia
               className='fadeIn'
               component='img'
+              onLoad={ () => setIsImageLoaded( true ) }
               image={ productImage }
               alt={ product.title }
             />
@@ -54,7 +56,8 @@ export const ProductCard = ({ product }) => {
       <Box
         className='fadeIn'
         sx={{
-          mt: 1
+          mt: 1,
+          display: isImageLoaded ? 'block' : 'none'
         }}
       >
         <Typography fontWeight={ 700 }>{ product.title }</Typography>
