@@ -33,7 +33,7 @@ export const ProductCard = ({ product }) => {
     >
       <Card>
         <NextLink
-          href='/products/slug'
+          href={ `/products/${ product.slug }` }
           passHref
           prefetch={ false }
           legacyBehavior

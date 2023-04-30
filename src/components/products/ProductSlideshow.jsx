@@ -10,7 +10,7 @@ export const ProductSlideshow = ({ images }) => {
     >
       {
         images.map( image => {
-          const url = `/products/${ image }`
+          const url = `/products/${ image }`;
 
           return (
             <div

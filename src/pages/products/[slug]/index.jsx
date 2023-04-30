@@ -1,12 +1,33 @@
-import { Box, Button, Chip, Grid, Typography } from '@mui/material';
+// Next.js
+import { useRouter } from 'next/router';
+// Material UI
+import {
+  Box,
+  Button,
+  Grid,
+  Typography
+} from '@mui/material';
+// Layouts
 import { ShopLayout } from '@/components/layouts';
-import { initialData } from '@/database/products';
-import { ProductSizeSelector, ProductSlideshow } from '@/components/products';
-import { ItemCounter } from '@/components/ui';
+// Components
+import {
+  ItemCounter,
+  ProductSizeSelector,
+  ProductSlideshow
+} from '@/components';
+// Hooks
+import { useProducts } from '@/hooks';
 
-const product = initialData.products[ 0 ];
 
 const ProductPage = () => {
+  /*
+  const { query } = useRouter();
+  const { products: product, isLoading } = useProducts( `/products/${ query.slug }` );
+
+  if ( isLoading ) return <h1>Cargando</h1>
+  if ( !product ) return <h1>No existe</h1>
+  */
+
   return (
     <ShopLayout
       title={ product.title }
@@ -21,7 +42,6 @@ const ProductPage = () => {
           xs={ 12 }
           sm={ 7 }
         >
-          { /* SlideShow */ }
           <ProductSlideshow images={ product.images } />
         </Grid>
 
