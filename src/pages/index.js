@@ -6,19 +6,14 @@ import {
 } from '@mui/material';
 // Components
 import { ProductGrid } from '@/components/products';
+// Hooks
+import { useProducts } from '@/hooks';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 
 
-import useSWR from 'swr';
-const fetcher = ( ...args ) => fetch( ...args ).then( res => res.json() );
-
 export default function HomePage() {
-  const { data, error } = useSWR( '/api/products', fetcher );
-
-  if ( error ) return <div>Failed to load</div>
-  if ( !data ) return <div>Loading...</div>
-  const products = data.totalResponseProducts;
+  const { products, isLoading, isError } = useProducts( '/products' );
 
   return (
     <ShopLayout
@@ -41,7 +36,11 @@ export default function HomePage() {
         Todos los productos
       </Typography>
 
-      <ProductGrid products={ products } />
+      {
+        isLoading
+          ? <h1>Cargando...</h1>
+          : <ProductGrid products={ products } />
+      }
     </ShopLayout>
   );
 }
