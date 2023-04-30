@@ -1,10 +1,10 @@
 // Material UI
-import {
-  Typography
-} from '@mui/material';
+import { Typography } from '@mui/material';
 // Components
-import { ProductGrid } from '@/components/products';
-import { FullScreenLoading } from '@/components/ui';
+import {
+  FullScreenLoading,
+  ProductGrid
+} from '@/components';
 // Hooks
 import { useProducts } from '@/hooks';
 // Layouts
