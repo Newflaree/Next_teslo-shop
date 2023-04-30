@@ -1,7 +1,5 @@
-// Material UI
-import {
-  Typography
-} from '@mui/material';
+// Material
+import { Typography } from '@mui/material';
 // Components
 import { ProductGrid } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
@@ -11,13 +9,13 @@ import { useProducts } from '@/hooks';
 import { ShopLayout } from '@/components/layouts';
 
 
-export default function HomePage() {
-  const { products, isLoading, isError } = useProducts( '/products' );
+const MenPage = () => {
+  const { products, isLoading } = useProducts( '/products?gender=men' );
 
   return (
     <ShopLayout
-      title={ 'TesloShop - Home' }
-      pageDescription={ 'Encuentra los mejores productos de Teslo aquí' }
+      title={ 'TesloShop - Hombres' }
+      pageDescription={ 'Encuentra los mejores productos de Teslo para hombres' }
     >
       <Typography
         variant='h1'
@@ -32,7 +30,7 @@ export default function HomePage() {
           mb: 1
         }}
       >
-        Todos los productos
+        Productos para hombre
       </Typography>
 
       {
@@ -43,3 +41,5 @@ export default function HomePage() {
     </ShopLayout>
   );
 }
+
+export default MenPage;
