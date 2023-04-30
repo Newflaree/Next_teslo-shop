@@ -18,12 +18,11 @@ import { getProductBySlugService } from '../services';
  */
 const getProductBySlugController = async ( req, res ) => {
   try {
-
-    db.connect();
+    await db.connect();
 
     const { statusCode, ok, message, productBySlug } = await getProductBySlugService( req );
 
-    db.disconnect();
+    await db.disconnect();
 
     res.status( statusCode ).json({
       ok,

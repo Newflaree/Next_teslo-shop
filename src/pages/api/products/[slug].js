@@ -1,3 +1,4 @@
+import 'colors';
 // Controllers
 import { getProductBySlugController } from './controllers';
 

@@ -1,3 +1,4 @@
+import 'colors';
 // Controllers
 import { searchProductsController } from './controllers';
 
