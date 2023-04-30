@@ -19,7 +19,7 @@ const getProductsService = async ( req ) => {
   }
 
   try {
-    const [ totalCountProducts, totalResponseProucts ] = await Promise.all([
+    const [ totalCountProducts, totalResponseProducts ] = await Promise.all([
       Product.countDocuments( condition ),
       Product.find( condition )
         .select( 'title images price inStock slug -_id' )
@@ -28,7 +28,7 @@ const getProductsService = async ( req ) => {
 
     return {
       totalCountProducts,
-      totalResponseProucts
+      totalResponseProducts
     }
   } catch ( error ) {
     console.log( `${ '[SERVICE.GET-PRODUCTS]'.bgRed }: ${ error }` );

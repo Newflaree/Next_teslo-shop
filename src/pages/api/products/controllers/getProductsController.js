@@ -19,14 +19,14 @@ const getProductsController = async ( req, res ) => {
   try {
     await db.connect();
 
-    const { totalCountProducts, totalResponseProucts } = await getProductsService( req );
+    const { totalCountProducts, totalResponseProducts } = await getProductsService( req );
 
     await db.disconnect();
 
     res.status( 200 ).json({
       ok: true,
       totalCountProducts,
-      totalResponseProucts
+      totalResponseProducts
     });
   
   } catch ( error ) {

@@ -8,14 +8,17 @@ import {
 import { ProductGrid } from '@/components/products';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
-// Test Data
-import { initialData } from '@/database/products';
 
 
-const inter = Inter({ subsets: ['latin'] })
+import useSWR from 'swr';
+const fetcher = ( ...args ) => fetch( ...args ).then( res => res.json() );
 
-export default function Home() {
-  const { products } = initialData;
+export default function HomePage() {
+  const { data, error } = useSWR( '/api/products', fetcher );
+
+  if ( error ) return <div>Failed to load</div>
+  if ( !data ) return <div>Loading...</div>
+  const products = data.totalResponseProducts;
 
   return (
     <ShopLayout
