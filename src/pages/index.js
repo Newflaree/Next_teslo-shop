@@ -12,7 +12,6 @@ import { ShopLayout } from '@/components/layouts';
 import { initialData } from '@/database/products';
 
 
-
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
