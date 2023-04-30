@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 // Components
 import { ProductGrid } from '@/components/products';
+import { FullScreenLoading } from '@/components/ui';
 // Hooks
 import { useProducts } from '@/hooks';
 // Layouts
@@ -38,7 +39,7 @@ export default function HomePage() {
 
       {
         isLoading
-          ? <h1>Cargando...</h1>
+          ? <FullScreenLoading />
           : <ProductGrid products={ products } />
       }
     </ShopLayout>
