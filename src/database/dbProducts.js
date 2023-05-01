@@ -32,4 +32,23 @@ export const getAllProductsSlugs = async () => {
   }
 }
 
+export const getProductsBySearchTerm = async ( term = '' ) => {
+  term = term.toString().toLowerCase();
+
+  try {
+    await db.connect();
+    const searchedProducts = await Product.find({
+      $text: { $search: term }
+    })
+      .select( 'title images price inStock slug -_id' )
+      .lean();
+    await db.disconnect();
+
+    return searchedProducts;
+  
+  } catch ( error ) {
+    console.log( `${ '[CONFIG.DATABASE.GET-PRODUCTS-BY-SEARCH-TERM]'.bgRed }: ${ error }` );
+  }
+}
+
 

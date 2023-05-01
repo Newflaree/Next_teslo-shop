@@ -5,14 +5,16 @@ import {
   FullScreenLoading,
   ProductGrid
 } from '@/components';
+// Database
+import { dbProducts } from '@/database';
 // Hooks
 import { useProducts } from '@/hooks';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 
 
-const SearchPage = () => {
-  const { products, isLoading } = useProducts( '/search/cybertruck' );
+const SearchPage = ({ products }) => {
+  //const { products, isLoading } = useProducts( '/search/cybertruck' );
 
   return (
     <ShopLayout
@@ -35,13 +37,32 @@ const SearchPage = () => {
         ABC --- 123
       </Typography>
 
-      {
-        isLoading
-          ? <FullScreenLoading />
-          : <ProductGrid products={ products } />
-      }
+      <ProductGrid products={ products } />
     </ShopLayout>
   );
 }
+
+export const getServerSideProps = async ({ params }) => {
+  const { query = '' } = params;
+
+  if ( query.length === 0 ) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true
+      }
+    }
+  }
+
+  let products = await dbProducts.getProductsBySearchTerm( query );
+  // TODO: Retornar otros productos
+
+  return {
+    props: {
+      products
+    },
+  }
+}
+
 
 export default SearchPage;
