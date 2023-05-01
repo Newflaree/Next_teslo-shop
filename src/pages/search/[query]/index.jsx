@@ -1,5 +1,5 @@
 // Material UI
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 // Components
 import {
   FullScreenLoading,
@@ -13,7 +13,7 @@ import { useProducts } from '@/hooks';
 import { ShopLayout } from '@/components/layouts';
 
 
-const SearchPage = ({ products }) => {
+const SearchPage = ({ products, productsExists, query }) => {
   //const { products, isLoading } = useProducts( '/search/cybertruck' );
 
   return (
@@ -28,14 +28,43 @@ const SearchPage = ({ products }) => {
         Buscar Producto
       </Typography>
 
-      <Typography
-        variant='h2'
-        sx={{
-          mb: 1
-        }}
-      >
-        ABC --- 123
-      </Typography>
+      {
+        productsExists
+          ? (
+            <Typography
+              variant='h2'
+              sx={{
+                mb: 1
+              }}
+            >
+              Término: { query }
+            </Typography>
+          )
+          : (
+            <Box
+              display='flex'
+            >
+              <Typography
+                variant='h2'
+                sx={{
+                  mb: 1
+                }}
+              >
+                No encontramos ningún producto
+              </Typography>
+
+              <Typography
+                variant='h2'
+                color='secondary'
+                sx={{
+                  ml: 1
+                }}
+              >
+                { query }
+              </Typography>
+            </Box>
+          )
+      }
 
       <ProductGrid products={ products } />
     </ShopLayout>
@@ -55,11 +84,18 @@ export const getServerSideProps = async ({ params }) => {
   }
 
   let products = await dbProducts.getProductsBySearchTerm( query );
+  const productsExists = products.length > 0;
+
   // TODO: Retornar otros productos
+  if ( !productsExists ) {
+    products = await dbProducts.getAllProducts();
+  }
 
   return {
     props: {
-      products
+      products,
+      productsExists,
+      query
     },
   }
 }

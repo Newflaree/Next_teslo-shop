@@ -3,6 +3,22 @@ import { db } from '.';
 // Models
 import { Product } from '@/models';
 
+
+export const getAllProducts = async () => {
+  try {
+    await db.connect();
+    const allProducts = await Product.find()
+      .select( 'title images price inStock slug -_id' )
+      .lean();
+    await db.disconnect();
+
+    return allProducts;
+  
+  } catch ( error ) {
+    console.log( `${ '[CONFIG.DATABASE.GET-ALL-PRODUCTS]'.bgRed }: ${ error }` );
+  }
+}
+
 export const getProductBySlug = async ( slug = '' ) => {
   try {
     await db.connect();

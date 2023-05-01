@@ -21,7 +21,7 @@ export const connect = async() => {
       mongoConnection.isConnected = mongoose.connections[0].readyState;
 
       if ( mongoConnection.isConnected === 1 ) {
-        console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Using provious connction` );
+        console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Using previous connction` );
         return;
       }
 
