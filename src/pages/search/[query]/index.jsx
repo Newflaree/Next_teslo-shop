@@ -33,6 +33,7 @@ const SearchPage = ({ products, productsExists, query }) => {
           ? (
             <Typography
               variant='h2'
+              textTransform='capitalize'
               sx={{
                 mb: 1
               }}
@@ -56,6 +57,7 @@ const SearchPage = ({ products, productsExists, query }) => {
               <Typography
                 variant='h2'
                 color='secondary'
+                textTransform='capitalize'
                 sx={{
                   ml: 1
                 }}
