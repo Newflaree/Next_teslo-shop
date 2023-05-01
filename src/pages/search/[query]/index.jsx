@@ -86,7 +86,6 @@ export const getServerSideProps = async ({ params }) => {
   let products = await dbProducts.getProductsBySearchTerm( query );
   const productsExists = products.length > 0;
 
-  // TODO: Retornar otros productos
   if ( !productsExists ) {
     products = await dbProducts.getAllProducts();
   }

@@ -8,11 +8,10 @@ export const getAllProducts = async () => {
   try {
     await db.connect();
     const allProducts = await Product.find()
-      .select( 'title images price inStock slug -_id' )
       .lean();
     await db.disconnect();
 
-    return allProducts;
+    return JSON.parse( JSON.stringify( allProducts ) );
   
   } catch ( error ) {
     console.log( `${ '[CONFIG.DATABASE.GET-ALL-PRODUCTS]'.bgRed }: ${ error }` );
@@ -66,5 +65,3 @@ export const getProductsBySearchTerm = async ( term = '' ) => {
     console.log( `${ '[CONFIG.DATABASE.GET-PRODUCTS-BY-SEARCH-TERM]'.bgRed }: ${ error }` );
   }
 }
-
-
