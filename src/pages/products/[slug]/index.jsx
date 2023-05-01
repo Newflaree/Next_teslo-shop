@@ -20,14 +20,6 @@ import {
 
 
 const ProductPage = ({ product }) => {
-  /*
-  const { query } = useRouter();
-  const { products: product, isLoading } = useProducts( `/products/${ query.slug }` );
-
-  if ( isLoading ) return <h1>Cargando</h1>
-  if ( !product ) return <h1>No existe</h1>
-  */
-
   return (
     <ShopLayout
       title={ product.title }
@@ -100,6 +92,8 @@ const ProductPage = ({ product }) => {
   );
 }
 
+/*
+ * No Usar Esto
 export const getServerSideProps = async ({ params }) => {
   const product = await dbProducts.getProductBySlug( params.slug ) || {};
 
@@ -118,5 +112,40 @@ export const getServerSideProps = async ({ params }) => {
     },
   }
 }
+*/
+export const getStaticPaths = async ( ctx ) => {
+  const productSlugs = await dbProducts.getAllProductsSlugs();
+
+  return {
+    paths: productSlugs.map( ({ slug }) => ({
+      params: {
+        slug
+      }
+    })),
+    fallback: 'blocking'
+  }
+}
+
+export const getStaticProps = async ({ params }) => {
+  const { slug = '' } = params;
+  const product = await dbProducts.getProductBySlug( slug );
+
+  if ( !product ) {
+    return {
+      redirect: {
+        description: '/',
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {
+      product
+    },
+    revalidate: 86400
+  }
+}
+
 
 export default ProductPage;
