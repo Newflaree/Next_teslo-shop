@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { bgGreen, bgRed } from 'colors';
 
 /**
  * 0 = disconnected
@@ -14,7 +13,7 @@ const mongoConnection = {
 export const connect = async() => {
   try {
     if ( mongoConnection.isConnected ) {
-      console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Ya estabamos conectados` );
+      console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Now we are connected` );
       return;
     }
 
@@ -22,7 +21,7 @@ export const connect = async() => {
       mongoConnection.isConnected = mongoose.connections[0].readyState;
 
       if ( mongoConnection.isConnected === 1 ) {
-        console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Usando conexión anterior` );
+        console.log( `${ '[CONFIG.DATABASE.CONNECT]'.bgGreen }: Using provious connction` );
         return;
       }
 
@@ -49,7 +48,7 @@ export const disconnect = async() => {
     await mongoose.disconnect();
     mongoConnection.isConnected = 0;
 
-    console.log( `${ '[CONFIG.DATABASE.DISCONNECT]'.bgGreen }: Desconectado de MongoDB` );
+    console.log( `${ '[CONFIG.DATABASE.DISCONNECT]'.bgGreen }: Disconnected from MongoDB` );
 
   } catch ( error ) {
     await mongoose.disconnect();

@@ -1,5 +1,5 @@
 // React
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 // Next.js
 import { useRouter } from 'next/router';
 // Material UI
@@ -35,11 +35,18 @@ import { UIContext } from '@/context';
 
 export const SideMenu = () => {
   const router = useRouter();
+  const [ searchTerm, setSearchTerm ] = useState( '' );
   const { isMenuOpen, toggleSideMenu } = useContext( UIContext );
 
   const navigateTo = ( url ) => {
     toggleSideMenu();
     router.push( url );
+  }
+
+  const onSearchTerm = () => {
+    if ( searchTerm.trim().length === 0 ) return;
+
+    navigateTo( `/search/${ searchTerm }` )
   }
 
   return (
@@ -53,12 +60,15 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              value={ searchTerm }
+              onChange={ ( e ) => setSearchTerm( e.target.value ) }
+              onKeyPress={ ( e ) => e.key === 'Enter' ? onSearchTerm() : null }
               type='text'
               placeholder="Buscar..."
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="toggle password visibility"
+                    onClick={ onSearchTerm }
                   >
                     <SearchOutlined />
                   </IconButton>
