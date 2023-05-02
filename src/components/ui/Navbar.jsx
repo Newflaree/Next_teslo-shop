@@ -127,11 +127,12 @@ export const Navbar = () => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      onClick={ onSearchTerm }
+                      onClick={ () => {
+                        onSearchTerm
+                        setIsSearchVisible( false )
+                      }}
                     >
-                      <ClearOutlined 
-                        onClick={ () => setIsSearchVisible( false ) }
-                      />
+                      <ClearOutlined />
                     </IconButton>
                   </InputAdornment>
                 }
