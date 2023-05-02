@@ -22,7 +22,7 @@ import {useState} from 'react';
 
 
 const ProductPage = ({ product }) => {
-  const [ tempCartProduct, settempCartProduct ] = useState({
+  const [ tempCartProduct, setTempCartProduct ] = useState({
     _id: product._id,
     image: product.images[0],
     price: product.price,
@@ -34,10 +34,21 @@ const ProductPage = ({ product }) => {
   });
 
   const selectedSize = ( size ) => {
-    settempCartProduct( currentProduct => ({
+    setTempCartProduct( currentProduct => ({
       ...currentProduct,
       size
     }));
+  }
+
+  const onUpdateQuantity = ( quantity ) => {
+    setTempCartProduct( currentProduct => ({
+      ...currentProduct,
+      quantity
+    }));
+  }
+
+  const onAddProduct = () => {
+    console.log( tempCartProduct );
   }
 
   return (
@@ -77,8 +88,13 @@ const ProductPage = ({ product }) => {
             { /* Cantidad */ }
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
-              { /* TODO: Item Counter */ }
-              <ItemCounter />
+
+              <ItemCounter
+                currentValue={ tempCartProduct.quantity }
+                updatedQuantity={ onUpdateQuantity }
+                maxValue={ product.inStock > 10 ? 10 : product.inStock }
+              />
+              
               <ProductSizeSelector
                 sizes={ product.sizes }
                 selectedSizes={ tempCartProduct.size }
@@ -98,7 +114,7 @@ const ProductPage = ({ product }) => {
                         ? 'Agregar al carrito'
                         : 'Seleccione una talla'
                     }
-                                      </Button>
+                  </Button>
                 )
                 : (
                   <Chip
