@@ -48,7 +48,11 @@ const ProductPage = ({ product }) => {
   }
 
   const onAddProduct = () => {
+    if ( !tempCartProduct.size ) return;
+
+    //TODO: Llamar acción para agregar producto en el context
     console.log( tempCartProduct );
+    // router.push( '/cart' )
   }
 
   return (
@@ -106,6 +110,7 @@ const ProductPage = ({ product }) => {
               ( product.inStock > 0 ) 
                 ? (
                   <Button
+                    onClick={ onAddProduct }
                     color='secondary'
                     className='circular-btn'
                   >

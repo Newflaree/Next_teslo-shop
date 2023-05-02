@@ -1,4 +1,3 @@
-
 export const CartReducer = ( state, action ) => {
   switch ( action.type ) {
     case '[CART] - LoadCart from cookies | storage':
@@ -8,7 +7,7 @@ export const CartReducer = ( state, action ) => {
 
     case '[CART] - Add product':
       return {
-        ...state,
+        ...state
       }
 
     default: 
