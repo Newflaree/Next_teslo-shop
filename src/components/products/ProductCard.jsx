@@ -7,6 +7,7 @@ import {
   Card,
   CardActionArea,
   CardMedia,
+  Chip,
   Grid,
   Link,
   Typography
@@ -40,6 +41,21 @@ export const ProductCard = ({ product }) => {
         >
           <Link>
             <CardActionArea>
+              {
+                ( product.inStock === 0 ) && (
+                  <Chip
+                    color='error'
+                    label='No hay disponibles'
+                    sx={{
+                      position: 'absolute',
+                      zIndex: '99',
+                      top: '10px',
+                      left: '10px'
+                    }}
+                  />
+                )
+              }
+
               <CardMedia
               className='fadeIn'
               component='img'
