@@ -76,7 +76,7 @@ export const Navbar = () => {
           >
             <Link>
               <Button
-                color={ asPath === '/category/men' ? 'info' : 'primary' }
+                color={ asPath === '/category/men' ? 'primary' : 'info' }
               >
                 Hombres
             </Button>
@@ -89,7 +89,7 @@ export const Navbar = () => {
           >
             <Link>
               <Button
-                color={ asPath === '/category/women' ? 'info' : 'primary' }
+                color={ asPath === '/category/women' ? 'primary' : 'info' }
               >
                 Mujeres
               </Button>
@@ -102,7 +102,7 @@ export const Navbar = () => {
           >
             <Link>
               <Button
-                color={ asPath === '/category/kid' ? 'info' : 'primary' }
+                color={ asPath === '/category/kid' ? 'primary' : 'info' }
               >
                 Niños
               </Button>

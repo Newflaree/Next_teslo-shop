@@ -7,6 +7,7 @@ import { CartProvider, UIProvider } from '@/context';
 // Themes
 import { lightTheme } from '@/themes';
 
+import 'colors';
 import '@/styles/globals.css'
 
 export default function App({ Component, pageProps }) {

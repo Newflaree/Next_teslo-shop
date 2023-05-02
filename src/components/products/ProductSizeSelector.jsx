@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 
 
-export const ProductSizeSelector = ({ selectedSizes, sizes }) => {
+export const ProductSizeSelector = ({ selectedSizes, sizes, onSelectedSize }) => {
   return (
     <Box>
       {
@@ -9,7 +9,8 @@ export const ProductSizeSelector = ({ selectedSizes, sizes }) => {
           <Button
             key={ size }
             size='small'
-          color={ selectedSizes === size ? 'secondary' : 'primary' }
+            color={ selectedSizes === size ? 'primary' : 'info' }
+            onClick={ () => onSelectedSize( size ) }
           >
             { size }
           </Button>

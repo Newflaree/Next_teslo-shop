@@ -18,9 +18,28 @@ import {
   ProductSizeSelector,
   ProductSlideshow
 } from '@/components';
+import {useState} from 'react';
 
 
 const ProductPage = ({ product }) => {
+  const [ tempCartProduct, settempCartProduct ] = useState({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1
+  });
+
+  const selectedSize = ( size ) => {
+    settempCartProduct( currentProduct => ({
+      ...currentProduct,
+      size
+    }));
+  }
+
   return (
     <ShopLayout
       title={ product.title }
@@ -54,6 +73,7 @@ const ProductPage = ({ product }) => {
             <Typography variant='subtitle1' component='h2'>
               { `$${ product.price }` }
             </Typography>
+
             { /* Cantidad */ }
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
@@ -61,6 +81,8 @@ const ProductPage = ({ product }) => {
               <ItemCounter />
               <ProductSizeSelector
                 sizes={ product.sizes }
+                selectedSizes={ tempCartProduct.size }
+                onSelectedSize={ selectedSize }
               />
             </Box>
             { /* Agregar al carrito */ }
@@ -71,8 +93,12 @@ const ProductPage = ({ product }) => {
                     color='secondary'
                     className='circular-btn'
                   >
-                    Agregar al carrito
-                  </Button>
+                    {
+                      tempCartProduct.size
+                        ? 'Agregar al carrito'
+                        : 'Seleccione una talla'
+                    }
+                                      </Button>
                 )
                 : (
                   <Chip
