@@ -1,3 +1,5 @@
+// React
+import { useContext, useState } from 'react';
 // Next.js
 import { useRouter } from 'next/router';
 // Material UI
@@ -8,20 +10,23 @@ import {
   Grid,
   Typography
 } from '@mui/material';
-// Layouts
-import { ShopLayout } from '@/components/layouts';
-// Database
-import { dbProducts } from '@/database';
 // Components
 import {
   ItemCounter,
   ProductSizeSelector,
   ProductSlideshow
 } from '@/components';
-import {useState} from 'react';
+// Context
+import {CartContext} from '@/context';
+// Database
+import { dbProducts } from '@/database';
+// Layouts
+import { ShopLayout } from '@/components/layouts';
 
 
 const ProductPage = ({ product }) => {
+  const { push } = useRouter();
+  const { addProductToCart } = useContext( CartContext );
   const [ tempCartProduct, setTempCartProduct ] = useState({
     _id: product._id,
     image: product.images[0],
@@ -50,9 +55,8 @@ const ProductPage = ({ product }) => {
   const onAddProduct = () => {
     if ( !tempCartProduct.size ) return;
 
-    //TODO: Llamar acción para agregar producto en el context
-    console.log( tempCartProduct );
-    // router.push( '/cart' )
+    addProductToCart( tempCartProduct );
+    push( '/cart' )
   }
 
   return (

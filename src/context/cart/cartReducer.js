@@ -1,13 +1,14 @@
-export const CartReducer = ( state, action ) => {
+export const cartReducer = ( state, action ) => {
   switch ( action.type ) {
-    case '[CART] - LoadCart from cookies | storage':
+    case '[CART] - Load Cart From Cookies | storage':
       return {
         ...state,
       }
 
-    case '[CART] - Add product':
+    case '[CART] - Update Products In Cart':
       return {
-        ...state
+        ...state,
+        cart: [ ...action.payload ]
       }
 
     default: 
