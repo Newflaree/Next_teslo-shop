@@ -44,7 +44,7 @@ export const ProductCard = ({ product }) => {
               {
                 ( product.inStock === 0 ) && (
                   <Chip
-                    color='error'
+                    color='primary'
                     label='No hay disponibles'
                     sx={{
                       position: 'absolute',

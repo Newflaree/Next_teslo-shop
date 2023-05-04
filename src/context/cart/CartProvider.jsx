@@ -20,37 +20,48 @@ export const CartProvider = ({ children }) => {
         : [];
 
       dispatch({
-        type: '[CART] - Load Cart From Cookies | storage',
+        type: '[CART] - Update Products In Cart',
         payload: cookieProducts
       });
+    
     } catch ( error ) {
       dispatch({
-        type: '[CART] - Load Cart From Cookies | storage',
+        type: '[CART] - Update Products In Cart',
         payload: []
       });
     }
-  }, []);
+  }, [] );
 
+  /*
   useEffect( () => {
-     Cookie.set( 'cart', JSON.stringify( state.cart ) );
+    Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }, [ state.cart ] );
+    * */
 
   const addProductToCart = ( product ) => {
     const isProductInCart = state.cart.some( p => p._id === product._id );
 
-    if ( !isProductInCart ) return dispatch({
-      type: '[CART] - Update Products In Cart',
-      payload: [ ...state.cart, product ]
-    })
+    if ( !isProductInCart ) {
+      dispatch({
+        type: '[CART] - Update Products In Cart',
+        payload: [ ...state.cart, product ]
+      });
+
+      return Cookie.set( 'cart', JSON.stringify( state.cart ) );
+    }
 
     const isProductInCartButDifferentSize = state.cart.some( p => {
-
       return p._id === product._id && p.size === product.size
     });
-    if ( !isProductInCartButDifferentSize ) return dispatch({
-      type: '[CART] - Update Products In Cart',
-      payload: [ ...state.cart, product ]
-    })
+
+    if ( !isProductInCartButDifferentSize ) {
+      dispatch({
+        type: '[CART] - Update Products In Cart',
+        payload: [ ...state.cart, product ]
+      });
+
+      return Cookie.set( 'cart', JSON.stringify( state.cart ) );
+    }
 
     const updatedProducts = state.cart.map( p => {
       if ( p._id !== product._id ) return p;
@@ -60,11 +71,13 @@ export const CartProvider = ({ children }) => {
 
       return p;
     });
-
+    
     dispatch({
       type: '[CART] - Update Products In Cart',
-      payload: [ ...updatedProducts ]
+      payload: updatedProducts
     });
+
+    return Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }
 
   return (
