@@ -89,6 +89,19 @@ export const CartProvider = ({ children }) => {
     return Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }
 
+  const removeCartProduct = ( product ) => {
+    const productsAfterRemoval = state.cart.filter( p => {
+      if ( p._id + p.size !== product._id + product.size ) return p;
+    });
+
+    dispatch({
+      type: '[CART] - Remove Product In Cart',
+      payload: productsAfterRemoval
+    });
+
+    Cookie.set( 'cart', JSON.stringify( state.cart ) );
+  }
+
 
   return (
     <CartContext.Provider
@@ -96,6 +109,7 @@ export const CartProvider = ({ children }) => {
         ...state,
         // Methods
         addProductToCart,
+        removeCartProduct,
         updateCartQuantity
       }}
     >
