@@ -1,3 +1,5 @@
+// React
+import { useContext } from 'react';
 // Next.js
 import NextLink from 'next/link';
 // Material UI
@@ -12,22 +14,17 @@ import {
 } from '@mui/material';
 // Components
 import { ItemCounter } from '../ui';
-// Test Data
-import { initialData } from '@/database/products';
+// Context
+import { CartContext } from '@/context';
 
-const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2]
-]
 
 export const CartList = ({ editable = false }) => {
-
+  const { cart } = useContext( CartContext )
 
   return (
     <>
       {
-        productsInCart.map( product => (
+        cart.map( product => (
           <Grid
             key={ product.slug }
             container
@@ -48,7 +45,7 @@ export const CartList = ({ editable = false }) => {
                 <Link>
                   <CardActionArea>
                     <CardMedia 
-                      image={ `/products/${ product.images[0] }` }
+                      image={ `/products/${ product.image }` }
                       component='img'
                       sx={{
                         borderRadius: '5px'
@@ -74,8 +71,18 @@ export const CartList = ({ editable = false }) => {
 
                 {
                   editable
-                    ? <ItemCounter />
-                    : <Typography variant='h5'>3 items</Typography>
+                    ? (
+                      <ItemCounter 
+                        currentValue={ product.quantity }
+                        maxValue={ 10 }
+                        updatedQuantity={ () => {} }
+                      />
+                    )
+                    : (
+                      <Typography variant='h5'>
+                        { product.quantity } { product.quantity > 1 ? 'productos' : 'producto' }
+                      </Typography>
+                    )
 
                   
                 }
