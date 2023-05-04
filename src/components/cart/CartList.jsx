@@ -19,14 +19,21 @@ import { CartContext } from '@/context';
 
 
 export const CartList = ({ editable = false }) => {
-  const { cart } = useContext( CartContext )
+  const { cart, updateCartQuantity } = useContext( CartContext )
+
+  const onNewCartQuantityValue = ( product, newQuantityValue ) => {
+    product.quantity = newQuantityValue;
+
+    updateCartQuantity( product );
+  }
+
 
   return (
     <>
       {
         cart.map( product => (
           <Grid
-            key={ product.slug }
+            key={ product.slug + product.size }
             container
             spacing={ 2 }
             sx={{
@@ -38,7 +45,7 @@ export const CartList = ({ editable = false }) => {
               xs={ 3 }
             >
               <NextLink
-                href='/products/slug'
+                href={ `/products/${ product.slug }` }
                 passHref
                 legacyBehavior
               >
@@ -66,7 +73,7 @@ export const CartList = ({ editable = false }) => {
               >
                 <Typography variant='body1'>{ product.title }</Typography>
                 <Typography variant='body1'>
-                  Talla: <strong>M</strong>
+                  Talla: <strong>{ product.size }</strong>
                 </Typography>
 
                 {
@@ -75,7 +82,7 @@ export const CartList = ({ editable = false }) => {
                       <ItemCounter 
                         currentValue={ product.quantity }
                         maxValue={ 10 }
-                        updatedQuantity={ () => {} }
+                        updatedQuantity={ ( value ) => onNewCartQuantityValue( product, value ) }
                       />
                     )
                     : (

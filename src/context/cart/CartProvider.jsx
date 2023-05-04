@@ -80,12 +80,23 @@ export const CartProvider = ({ children }) => {
     return Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }
 
+  const updateCartQuantity = ( product ) => {
+    dispatch({
+      type: '[CART] - Update Cart Quantity',
+      payload: product
+    });
+
+    return Cookie.set( 'cart', JSON.stringify( state.cart ) );
+  }
+
+
   return (
     <CartContext.Provider
       value={{
         ...state,
         // Methods
-        addProductToCart
+        addProductToCart,
+        updateCartQuantity
       }}
     >
       { children }
