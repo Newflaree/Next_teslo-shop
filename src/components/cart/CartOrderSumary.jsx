@@ -1,7 +1,16 @@
+// React
+import { useContext } from 'react';
 // Material UI
 import { Grid, Typography } from '@mui/material';
+// Context
+import { CartContext } from '@/context';
+// Utils
+import { currency } from '@/utils';
 
 export const CartOrderSumary = () => {
+  const { numberOfItems, subTotal, tax, total } = useContext( CartContext );
+
+
   return (
     <Grid
       container
@@ -19,7 +28,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          3 items
+          { numberOfItems } { numberOfItems > 1 ? 'productos' : 'producto' }
         </Typography>
       </Grid>
 
@@ -36,14 +45,16 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          { `$${ 156.36 }` }
+          { currency.format( subTotal ) }
         </Typography>
       </Grid>
       <Grid
         item
         xs={ 6 }
       >
-        <Typography>Impuestos</Typography>
+        <Typography>
+          Impuestos ({ Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100 }%)
+        </Typography>
       </Grid>
       <Grid
         item
@@ -52,7 +63,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          { `$${ 35.34 }` }
+          { currency.format( tax ) }
         </Typography>
       </Grid>
       <Grid
@@ -74,7 +85,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography variant='subtitle1'>
-          { `$${ 191.70 }` }
+          { currency.format( total ) }
         </Typography>
       </Grid>
     </Grid>

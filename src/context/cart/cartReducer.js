@@ -29,6 +29,12 @@ export const cartReducer = ( state, action ) => {
         cart: [ ...action.payload ]
       }
 
+    case '[CART] - Update Order Summary':
+      return {
+        ...state,
+        ...action.payload
+      }
+
     default: 
       return state;
   }

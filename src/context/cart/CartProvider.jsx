@@ -7,7 +7,11 @@ import { CartContext, cartReducer } from './';
 
 
 const CART_INITIAL_STATE =	{
-  cart: []
+  cart: [],
+  numberOfItems: 0,
+  subTotal: 0,
+  tax: 0,
+  total: 0
 }
 
 export const CartProvider = ({ children }) => {
@@ -54,7 +58,10 @@ export const CartProvider = ({ children }) => {
       total: subTotal * ( taxRate + 1 )
     }
 
-    console.log({ orderSummary });
+    dispatch({
+      type: '[CART] - Update Order Summary',
+      payload: orderSummary
+    });
   }, [ state.cart ] );
 
   const addProductToCart = ( product ) => {
