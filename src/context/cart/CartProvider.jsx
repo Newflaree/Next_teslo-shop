@@ -37,6 +37,25 @@ export const CartProvider = ({ children }) => {
     Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }, [ state.cart ] );
     * */
+  
+  useEffect( () => {
+    const numberOfItems = state.cart.reduce( ( prev, current ) => current.quantity + prev, 0 );
+
+    const subTotal = state.cart.reduce( ( prev, current ) => {
+      return ( current.price * current.quantity ) + prev;
+    }, 0 );
+
+    const taxRate = Number( process.env.NEXT_PUBLIC_TAX_RATE ) || 0;
+
+    const orderSummary = {
+      numberOfItems,
+      subTotal,
+      tax: subTotal * taxRate,
+      total: subTotal * ( taxRate + 1 )
+    }
+
+    console.log({ orderSummary });
+  }, [ state.cart ] );
 
   const addProductToCart = ( product ) => {
     const isProductInCart = state.cart.some( p => p._id === product._id );
