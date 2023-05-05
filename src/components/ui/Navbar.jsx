@@ -187,6 +187,7 @@ export const Navbar = () => {
         </NextLink>
 
         <Button
+          variant='outlined'
           onClick={ toggleSideMenu }
         >
           Menú
