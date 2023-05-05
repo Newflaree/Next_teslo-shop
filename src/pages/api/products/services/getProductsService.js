@@ -31,6 +31,8 @@ const getProductsService = async ( req ) => {
       totalResponseProducts
     }
   } catch ( error ) {
+    await db.disconnect();
+
     console.log( `${ '[SERVICE.GET-PRODUCTS]'.bgRed }: ${ error }` );
   }
 }

@@ -31,6 +31,11 @@ const getProductsController = async ( req, res ) => {
   
   } catch ( error ) {
     console.log( `${ '[CONTROLLER.GET-PRODUCTS]'.bgRed }: ${ error }` );
+
+    res.status( 500 ).json({
+      ok: false,
+      message: 'Something went wrong. Talking the Admin'
+    });
   }
 }
 

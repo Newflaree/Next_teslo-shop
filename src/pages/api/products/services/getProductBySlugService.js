@@ -28,6 +28,8 @@ const getProductBySlugService = async ( req ) => {
       productBySlug
     }
   } catch ( error ) {
+    await db.disconnect();
+
     console.log( `${ '[SERVICE.GET-PRODUCT-BY-SLUG]'.bgRed }: ${ error }` );
   }
 }

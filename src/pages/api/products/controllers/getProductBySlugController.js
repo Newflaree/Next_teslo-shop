@@ -32,6 +32,11 @@ const getProductBySlugController = async ( req, res ) => {
   
   } catch ( error ) {
     console.log( `${ '[CONTROLLER.GET-PRODUCT-BY-SLUG]'.bgRed }: ${ error }` );
+
+    res.status( 500 ).json({
+      ok: false,
+      message: 'Something went wrong. Talking the Admin'
+    });
   }
 }
 

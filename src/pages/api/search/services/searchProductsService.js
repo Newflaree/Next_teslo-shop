@@ -36,6 +36,8 @@ const searchProductsService = async ( req ) => {
       searchedProducts
     }
   } catch ( error ) {
+    await db.disconnect();
+
     console.log( `${ '[SERVICE.GET-PRODUCTS]'.bgRed }: ${ error }` );
   }
 }
