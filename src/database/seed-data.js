@@ -1,4 +1,27 @@
+import bcrypt from 'bcryptjs';
+
+
 export const initialData = {
+  users: [
+    {
+      name: 'Camilo Lolero',
+      email: 'test1@email.com',
+      password: bcrypt.hashSync( '123456' ),
+      role: 'ADMIN_ROLE'
+    },
+    {
+      name: 'Test 2',
+      email: 'test2@email.com',
+      password: bcrypt.hashSync( '123456' ),
+      role: 'CLIENT_ROLE'
+    },
+    {
+      name: 'Test 3',
+      email: 'test3@email.com',
+      password: bcrypt.hashSync( '123456' ),
+      role: 'CLIENT_ROLE'
+    },
+  ],
   products: [
         {
             description: "Introducing the Tesla Chill Collection. The Men’s Chill Crew Neck Sweatshirt has a premium, heavyweight exterior and soft fleece interior for comfort in any season. The sweatshirt features a subtle thermoplastic polyurethane T logo on the chest and a Tesla wordmark below the back collar. Made from 60% cotton and 40% recycled polyester.",
@@ -784,3 +807,4 @@ export const initialData = {
         },
   ]
 }
+

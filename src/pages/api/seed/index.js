@@ -1,5 +1,5 @@
 import { db, seedDatabase } from '@/database';
-import { Product } from '@/models';
+import { Product, User } from '@/models';
 
 export default async function handler( req, res ) {
   if ( process.env.NODE_ENV === 'production' ) {
@@ -8,10 +8,13 @@ export default async function handler( req, res ) {
     });
   };
 
-  
-
   await db.connect();
 
+  // Seed Users
+  await User.deleteMany();
+  await User.insertMany( seedDatabase.initialData.users );
+
+  // Seed Products
   await Product.deleteMany();
   await Product.insertMany( seedDatabase.initialData.products );
 
