@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import { db } from '@/database';
 // Models
 import { User } from '@/models';
+// Utils
+import { jwt } from '@/utils';
 
 
 /**
@@ -31,14 +33,18 @@ const authLoginService = async ( req ) => {
       message: 'Correo electrónico o contraseña inválidos'
     };
 
+    const { _id, name, role } = registeredUser;
+
+    const token = jwt.signToken( _id, email );
+
     return {
       statusCode: 200,
       ok: true,
-      token: '',
+      token,
       registeredUser: {
-        email: registeredUser.email,
-        name: registeredUser.name,
-        role: registeredUser.role
+        email,
+        name,
+        role
       }
     }
   } catch ( error ) {
