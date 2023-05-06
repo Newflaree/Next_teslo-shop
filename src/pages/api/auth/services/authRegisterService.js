@@ -5,8 +5,7 @@ import { db } from '@/database';
 // Models
 import { User } from '@/models';
 // Utils
-import { jwt } from '@/utils';
-
+import { jwt, validation } from '@/utils';
 
 
 /**
@@ -18,26 +17,25 @@ import { jwt } from '@/utils';
 const authRegisterService = async ( req ) => {
   const { email = '', password = '', name = '' } = req.body;
 
+  if ( !validation.isValidEmail( email ) ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'El correo electrónico no tiene un formato permitido'
+  }
+
+  if ( password.length < 6 ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'La contraseña debe de tener al menos 6 carácteres'
+  }
+
+  if ( name.length < 3 ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'El nombre debe de tener al menos 2 carácteres'
+  }
+
   try {
-
-    if ( password.length < 6 ) {
-      return {
-        statusCode: 400,
-        ok: false,
-        message: 'La contraseña debe de tener al menos 6 carácteres'
-      }
-    }
-
-    if ( name.length < 3 ) {
-      return {
-        statusCode: 400,
-        ok: false,
-        message: 'El nombre debe de tener al menos 2 carácteres'
-      }
-    }
-
-    //TODO: Validate email
-
     await db.connect();
     const registeredUser = await User.findOne({ email });
 
@@ -47,7 +45,7 @@ const authRegisterService = async ( req ) => {
       return {
         statusCode: 400,
         ok: false,
-        message: 'Ya existe un usuario con ese email'
+        message: 'Ya existe un usuario con ese correo electrónico'
       }
     }
 
