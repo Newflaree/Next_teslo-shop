@@ -13,15 +13,21 @@ import {
 import { useForm } from 'react-hook-form';
 // Components
 import { AuthLayout } from '@/components/layouts';
-import {validation} from '@/utils';
+// Utils
+import { validation } from '@/utils';
+import {tesloApi} from '@/api';
 
 
 const LoginPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  console.log({ errors });
 
-  const onLoginUser = ( data ) => {
-    console.log({ data });
+  const onLoginUser = async ({ email, password }) => {
+    try {
+      const { data } = await tesloApi.post( '/auth/login', { email, password } );
+      const {} = data;
+    } catch ( error ) {
+      console.log( error.response.data );
+    }
   }
 
   return (
