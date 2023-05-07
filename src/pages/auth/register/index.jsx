@@ -1,5 +1,15 @@
+/**
+ * Author: [Camilo López A.]
+ * Date: [creación/modificación]
+ * Description: Página de registro para la aplicación.
+ *
+ * Dependencies:
+*/
+// React
+import { useState } from 'react';
 // Next.js
-import NextLink from "next/link";
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 // Material UI
 import {
   Box,
@@ -7,127 +17,207 @@ import {
   Link,
   Grid,
   TextField,
-  Typography
-} from "@mui/material";
+  Typography,
+  Chip
+} from '@mui/material';
+// Material Icons
+import { ErrorOutline } from '@mui/icons-material';
+// React Hook Form
+import { useForm } from 'react-hook-form';
+//
+// Api
+import { tesloApi } from '@/api';
 // Components
-import { AuthLayout } from "@/components/layouts";
+import { AuthLayout } from '@/components/layouts';
+// Utils
+import { validation } from '@/utils';
 
+
+/**
+ * RegisterPage component
+ *
+ * Displays a registration form for the user to create an account.
+ *
+ * @return {JSX.Element} The JSX for the registration page.
+ */
 const RegisterPage = () => {
+  //const { push } = useRouter()
+  const [ showError, setShowError ] = useState( false );
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const onRegisterUser = async ({ email, password, name }) => {
+    setShowError( false );
+
+    try {
+      const { data } = await tesloApi.post( '/auth/register', { email, password, name } );
+      const { token, newUser } = data;
+      console.log({ token, newUser });
+
+      //TODO: Navegar la la pantalla desde la que viene en la app
+
+    } catch ( error ) {
+      console.log( error.response.data );
+      setShowError( true );
+
+      setTimeout( () => {
+        setShowError( false );
+
+      }, 4000 );
+    }
+  }
+
   return (
     <AuthLayout title='Registro'>
-      <Box
-        sx={{
-          width: 350,
-          padding: '10px 20px'
-        }}
+      <form
+        onSubmit={ handleSubmit( onRegisterUser ) }
+        noValidate={ true }
       >
-        <Grid
-          className="fadeIn"
-          container
-          spacing={ 2 }
+        <Box
+          sx={{
+            width: 350,
+            padding: '10px 20px'
+          }}
         >
           <Grid
-            item
-            xs={ 12 }
-            paddingY={ 4 }
+            className="fadeIn"
+            container
+            spacing={ 2 }
           >
-            <Typography
-              variant='h1'
-              component='h1'
-              sx={{
-                textAlign: 'center'
-              }}
+            <Grid
+              item
+              xs={ 12 }
+              paddingY={ 4 }
             >
-              Crear cuenta
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Nombre'
-              type='text'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Correo'
-              type='email'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Contraseña'
-              type='password'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Repetir contraseña'
-              type='password'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-            marginY={ 2 }
-          >
-            <Button
-              fullWidth
-              color='secondary'
-              className='circular-btn'
-              size='large'
-            >
-              Registrarse
-            </Button>
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-            display='flex'
-            justifyContent='end'
-          >
-            <NextLink
-              href='/auth/login'
-              passHref
-              legacyBehavior
-            >
-              <Link
-                underline='always'
-                color='rgba(0,0,0)'
+              <Typography
+                variant='h1'
+                component='h1'
+                sx={{
+                  textAlign: 'center'
+                }}
               >
-                ¿Ya tienes una cuenta?
-              </Link>
-            </NextLink>
+                Crear cuenta
+              </Typography>
+              <Chip
+                className='fadeIn'
+                label='Custom Error'
+                color='error'
+                icon={ <ErrorOutline /> }
+                sx={{
+                  mt: 2,
+                  display: showError ? 'flex' : 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                type='text'
+                label='Nombre'
+                variant='filled'
+                fullWidth
+                { ...register( 'name', {
+                  required: 'Debe ingresar su nombre',
+                  minLength: { value: 2, message: 'Mínimo 2 carácteres' }
+                }) }
+                error={ !!errors.name }
+                helperText={ errors.name?.message }
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                type='email'
+                label='Correo electrónico'
+                variant='filled'
+                fullWidth
+                { ...register( 'email', {
+                  required: 'Debe ingresar su correo electrónico',
+                  validate: validation.email
+                }) }
+                error={ !!errors.email }
+                helperText={ errors.email?.message }
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                type='password'
+                label='Contraseña'
+                variant='filled'
+                fullWidth
+                { ...register( 'password', {
+                  required: 'Debe ingresar una contraseña',
+                  minLength: { value: 6, message: 'Mínimo 6 carácteres' }
+                }) }
+                error={ !!errors.password }
+                helperText={ errors.password?.message }
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                label='Repetir contraseña'
+                type='password'
+                variant='filled'
+                fullWidth
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+              marginY={ 2 }
+            >
+              <Button
+                type='submit'
+                fullWidth
+                color='secondary'
+                className='circular-btn'
+                size='large'
+              >
+                Registrarse
+              </Button>
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+              display='flex'
+              justifyContent='end'
+            >
+              <NextLink
+                href='/auth/login'
+                passHref
+                legacyBehavior
+              >
+                <Link
+                  underline='always'
+                  color='rgba(0,0,0)'
+                >
+                  ¿Ya tienes una cuenta?
+                </Link>
+              </NextLink>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </form>
     </AuthLayout>
   );
 }
+
 
 export default RegisterPage;

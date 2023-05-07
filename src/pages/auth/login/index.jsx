@@ -1,7 +1,8 @@
 // React
-import {useState} from 'react';
+import { useState } from 'react';
 // Next.js
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 // Material UI
 import {
   Box,
@@ -13,7 +14,7 @@ import {
   Chip
 } from '@mui/material';
 // Material Icons
-import {ErrorOutline} from '@mui/icons-material';
+import { ErrorOutline } from '@mui/icons-material';
 // React Hook Form
 import { useForm } from 'react-hook-form';
 //
@@ -26,6 +27,7 @@ import { validation } from '@/utils';
 
 
 const LoginPage = () => {
+  //const { push } = useRouter()
   const [ showError, setShowError ] = useState( false );
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -38,6 +40,7 @@ const LoginPage = () => {
       console.log({ token, registeredUser });
 
       //TODO: Navegar la la pantalla desde la que viene en la app
+      //push( '/' );
 
     } catch ( error ) {
       console.log( error.response.data );
@@ -172,5 +175,6 @@ const LoginPage = () => {
     </AuthLayout>
   );
 }
+
 
 export default LoginPage;
