@@ -18,12 +18,14 @@ const validateTokenController = async ( req, res ) => {
     const {
       statusCode,
       ok,
+      message,
       token,
       connectedUser
     } = await validateTokenService( req );
 
     res.status( statusCode ).json({
       ok,
+      message,
       token,
       connectedUser
     });

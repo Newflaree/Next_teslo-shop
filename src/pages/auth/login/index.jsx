@@ -1,5 +1,5 @@
 // Next.js
-import NextLink from "next/link";
+import NextLink from 'next/link';
 // Material UI
 import {
   Box,
@@ -8,99 +8,116 @@ import {
   Grid,
   TextField,
   Typography
-} from "@mui/material";
+} from '@mui/material';
+// React Hook Form
+import { useForm } from 'react-hook-form';
 // Components
-import { AuthLayout } from "@/components/layouts";
+import { AuthLayout } from '@/components/layouts';
+
 
 const LoginPage = () => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const onLoginUser = ( data ) => {
+    console.log({ data });
+  }
+
   return (
     <AuthLayout title='Ingresar'>
-      <Box
-        sx={{
-          width: 350,
-          padding: '10px 20px'
-        }}
+      <form
+        onSubmit={ handleSubmit( onLoginUser ) }
       >
-        <Grid
-          container
-          spacing={ 2 }
+        <Box
+          sx={{
+            width: 350,
+            padding: '10px 20px'
+          }}
         >
           <Grid
-            item
-            xs={ 12 }
-            paddingY={ 4 }
+            className="fadeIn"
+            container
+            spacing={ 2 }
           >
-            <Typography
-              variant='h1'
-              component='h1'
-              sx={{
-                textAlign: 'center'
-              }}
+            <Grid
+              item
+              xs={ 12 }
+              paddingY={ 4 }
             >
-              Iniciar Sesión
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Correo'
-              type='email'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-          >
-            <TextField 
-              label='Contraseña'
-              type='password'
-              variant='filled'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-            marginY={ 2 }
-          >
-            <Button
-              fullWidth
-              color='secondary'
-              className='circular-btn'
-              size='large'
-            >
-              Ingresar
-            </Button>
-          </Grid>
-
-          <Grid
-            item
-            xs={ 12 }
-            display='flex'
-            justifyContent='end'
-          >
-            <NextLink
-              href='/auth/register'
-              passHref
-              legacyBehavior
-            >
-              <Link
-                underline='always'
-                color='rgba(0,0,0)'
+              <Typography
+                variant='h1'
+                component='h1'
+                sx={{
+                  textAlign: 'center'
+                }}
               >
-                ¿No tienes cuenta?
-              </Link>
-            </NextLink>
+                Iniciar Sesión
+              </Typography>
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                type='email'
+                label='Correo'
+                fullWidth
+                variant='filled'
+                { ...register( 'email' ) }
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+            >
+              <TextField 
+                type='password'
+                label='Contraseña'
+                fullWidth
+                variant='filled'
+                { ...register( 'password' ) }
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+              marginY={ 2 }
+            >
+              <Button
+                type='submit'
+                fullWidth
+                color='secondary'
+                className='circular-btn'
+                size='large'
+              >
+                Ingresar
+              </Button>
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+              display='flex'
+              justifyContent='end'
+            >
+              <NextLink
+                href='/auth/register'
+                passHref
+                legacyBehavior
+              >
+                <Link
+                  underline='always'
+                  color='rgba(0,0,0)'
+                >
+                  ¿No tienes cuenta?
+                </Link>
+              </NextLink>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </form>
     </AuthLayout>
   );
 }

@@ -22,6 +22,7 @@ const RegisterPage = () => {
         }}
       >
         <Grid
+          className="fadeIn"
           container
           spacing={ 2 }
         >

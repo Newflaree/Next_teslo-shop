@@ -51,8 +51,13 @@ const validateTokenService = async ( req ) => {
     }
   } catch ( error ) {
     await db.disconnect();
-
     console.log( `${ '[SERVICE.VALIDATE-TOKEN]'.bgRed }: ${ error }` );
+
+    return {
+      statusCode: 401,
+      ok: false,
+      message: 'Token de autorización no es válido'
+    }
   }
 }
 
