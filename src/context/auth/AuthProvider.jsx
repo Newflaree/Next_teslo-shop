@@ -1,5 +1,5 @@
 // React
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 // Axios
 import axios from 'axios';
 // JS Cookie
@@ -19,11 +19,28 @@ const AUTH_INITIAL_STATE =	{
 export const AuthProvider = ({ children }) => {
   const [ state, dispatch ] = useReducer( authReducer, AUTH_INITIAL_STATE );
 
+  useEffect( () => {
+    checkToken();
+  }, [] );
+
+  const checkToken = async () => {
+    try {
+      const { data } = await tesloApi.get( '/auth/validate-token' );
+      const { token, connectedUser } = data;
+
+      Cookie.set( 'token', token );
+      dispatch({ type: '[AUTH] - Login', payload: connectedUser });
+    
+    } catch ( error ) {
+      Cookie.remove( 'token' );
+    }
+  }
+
+
   const loginUser = async ( email = '', password = '' ) => {
     try {
       const { data } = await tesloApi.post( '/auth/login', { email, password } );
       const { token, registeredUser } = data;
-      console.log({ token, registeredUser });
 
       Cookie.set( 'token', token );
       dispatch({ type: '[AUTH] - Login', payload: registeredUser });
@@ -31,7 +48,6 @@ export const AuthProvider = ({ children }) => {
       return true;
 
     } catch ( error ) {
-      console.log( error.response.data );
       return false;
     }
   }
@@ -40,7 +56,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await tesloApi.post( '/auth/register', { email, password, name } );
       const { token, newUser } = data;
-      console.log({ token, newUser });
 
       Cookie.set( 'token', token );
       dispatch({ type: '[AUTH] - Login', payload: newUser });
@@ -50,7 +65,6 @@ export const AuthProvider = ({ children }) => {
       }
 
     } catch ( error ) {
-      console.log( error.response.data );
       if ( axios.isAxiosError( error ) ) {
         return {
           hasError: true,
