@@ -6,7 +6,7 @@
  * Dependencies:
 */
 // React
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 // Next.js
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -29,6 +29,8 @@ import { useForm } from 'react-hook-form';
 import { tesloApi } from '@/api';
 // Components
 import { AuthLayout } from '@/components/layouts';
+// Context
+import { AuthContext } from '@/context';
 // Utils
 import { validation } from '@/utils';
 
@@ -41,29 +43,28 @@ import { validation } from '@/utils';
  * @return {JSX.Element} The JSX for the registration page.
  */
 const RegisterPage = () => {
-  //const { push } = useRouter()
-  const [ showError, setShowError ] = useState( false );
+
+  const { replace } = useRouter()
+  const { registerUser } = useContext( AuthContext );
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const [ showError, setShowError ] = useState( false );
+  const [ errorMessage, setErrorMessage ] = useState( '' );
 
   const onRegisterUser = async ({ email, password, name }) => {
     setShowError( false );
 
-    try {
-      const { data } = await tesloApi.post( '/auth/register', { email, password, name } );
-      const { token, newUser } = data;
-      console.log({ token, newUser });
+    const { hasError, message } = await registerUser( email, password, name );
 
-      //TODO: Navegar la la pantalla desde la que viene en la app
-
-    } catch ( error ) {
-      console.log( error.response.data );
+    if ( hasError ) {
       setShowError( true );
+      setErrorMessage( message )
 
-      setTimeout( () => {
-        setShowError( false );
+      setTimeout( () => setShowError( false ), 4000 );
 
-      }, 4000 );
+      return;
     }
+
+    replace( '/' );
   }
 
   return (

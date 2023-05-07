@@ -41,12 +41,7 @@ const LoginPage = () => {
 
     if ( !isValidLogin ) {
       setShowError( true );
-
-      setTimeout( () => {
-        setShowError( false );
-
-      }, 4000 );
-
+      setTimeout( () => setShowError( false ), 4000 );
       return;
     }
 
