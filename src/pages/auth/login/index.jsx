@@ -1,5 +1,5 @@
 // React
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 // Next.js
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -20,37 +20,37 @@ import { useForm } from 'react-hook-form';
 //
 // Api
 import { tesloApi } from '@/api';
-// Components
+// Layouts
 import { AuthLayout } from '@/components/layouts';
+// Context
+import { AuthContext } from '@/context';
 // Utils
 import { validation } from '@/utils';
 
 
 const LoginPage = () => {
-  //const { push } = useRouter()
+  const { replace } = useRouter();
+  const { loginUser } = useContext( AuthContext );
   const [ showError, setShowError ] = useState( false );
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   const onLoginUser = async ({ email, password }) => {
     setShowError( false );
 
-    try {
-      const { data } = await tesloApi.post( '/auth/login', { email, password } );
-      const { token, registeredUser } = data;
-      console.log({ token, registeredUser });
+    const isValidLogin = await loginUser( email, password );
 
-      //TODO: Navegar la la pantalla desde la que viene en la app
-      //push( '/' );
-
-    } catch ( error ) {
-      console.log( error.response.data );
+    if ( !isValidLogin ) {
       setShowError( true );
 
       setTimeout( () => {
         setShowError( false );
 
       }, 4000 );
+
+      return;
     }
+
+    replace( '/' );
   }
 
   return (
