@@ -13,10 +13,12 @@ import {
 import { useForm } from 'react-hook-form';
 // Components
 import { AuthLayout } from '@/components/layouts';
+import {validation} from '@/utils';
 
 
 const LoginPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  console.log({ errors });
 
   const onLoginUser = ( data ) => {
     console.log({ data });
@@ -26,6 +28,7 @@ const LoginPage = () => {
     <AuthLayout title='Ingresar'>
       <form
         onSubmit={ handleSubmit( onLoginUser ) }
+        noValidate={ true }
       >
         <Box
           sx={{
@@ -63,7 +66,12 @@ const LoginPage = () => {
                 label='Correo'
                 fullWidth
                 variant='filled'
-                { ...register( 'email' ) }
+                { ...register( 'email', {
+                  required: 'Este campo es requerido',
+                  validate: validation.isEmail
+                }) }
+                error={ !!errors.email }
+                helperText={ errors.email?.message }
               />
             </Grid>
 
@@ -76,7 +84,12 @@ const LoginPage = () => {
                 label='Contraseña'
                 fullWidth
                 variant='filled'
-                { ...register( 'password' ) }
+                { ...register( 'password', {
+                  required: 'Este campo es requerido',
+                  minLength: { value: 6, message: 'Mínimo 6 carácteres' }
+                }) }
+                error={ !!errors.password }
+                helperText={ errors.password?.message }
               />
             </Grid>
 
