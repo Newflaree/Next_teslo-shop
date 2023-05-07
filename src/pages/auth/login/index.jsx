@@ -1,3 +1,5 @@
+// React
+import {useState} from 'react';
 // Next.js
 import NextLink from 'next/link';
 // Material UI
@@ -7,26 +9,44 @@ import {
   Link,
   Grid,
   TextField,
-  Typography
+  Typography,
+  Chip
 } from '@mui/material';
+// Material Icons
+import {ErrorOutline} from '@mui/icons-material';
 // React Hook Form
 import { useForm } from 'react-hook-form';
+//
+// Api
+import { tesloApi } from '@/api';
 // Components
 import { AuthLayout } from '@/components/layouts';
 // Utils
 import { validation } from '@/utils';
-import {tesloApi} from '@/api';
 
 
 const LoginPage = () => {
+  const [ showError, setShowError ] = useState( false );
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   const onLoginUser = async ({ email, password }) => {
+    setShowError( false );
+
     try {
       const { data } = await tesloApi.post( '/auth/login', { email, password } );
-      const {} = data;
+      const { token, registeredUser } = data;
+      console.log({ token, registeredUser });
+
+      //TODO: Navegar la la pantalla desde la que viene en la app
+
     } catch ( error ) {
       console.log( error.response.data );
+      setShowError( true );
+
+      setTimeout( () => {
+        setShowError( false );
+
+      }, 4000 );
     }
   }
 
@@ -61,6 +81,18 @@ const LoginPage = () => {
               >
                 Iniciar Sesión
               </Typography>
+              <Chip 
+                className='fadeIn'
+                label='Correo electrónico o contraseña inválidos'
+                color='error'
+                icon={ <ErrorOutline /> }
+                sx={{
+                  mt: 2,
+                  display: showError ? 'flex' : 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              />
             </Grid>
 
             <Grid
