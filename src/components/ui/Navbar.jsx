@@ -175,7 +175,7 @@ export const Navbar = () => {
           legacyBehavior
         >
           <Link>
-            <IconButton>
+            <IconButton sx={{ mr: 1 }}>
               <Badge
                 badgeContent={ numberOfItems > 9 ? '+9' : numberOfItems }
                 color='secondary'

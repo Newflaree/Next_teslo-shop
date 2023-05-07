@@ -1,5 +1,5 @@
 // Services
-import { authRegisterService } from '../services';
+import { validateTokenService } from '../services';
 
 
 /**
@@ -13,25 +13,23 @@ import { authRegisterService } from '../services';
  * @param { Object } res - The HTTP response object.
  * @returns { void }
  */
-const authRegisterController = async ( req, res ) => {
+const validateTokenController = async ( req, res ) => {
   try {
     const {
       statusCode,
       ok,
-      message,
       token,
-      newUser
-    } = await authRegisterService( req )
+      connectedUser
+    } = await validateTokenService( req );
 
     res.status( statusCode ).json({
       ok,
-      message,
       token,
-      newUser
+      connectedUser
     });
 
   } catch ( error ) {
-    console.log( `${ '[CONTROLLER.AUTH-REGISTER]'.bgRed }: ${ error }` );
+    console.log( `${ '[CONTROLLER.VALIDATE-TOKEN]'.bgRed }: ${ error }` );
 
     res.status( 500 ).json({
       ok: false,
@@ -40,4 +38,4 @@ const authRegisterController = async ( req, res ) => {
   }
 }
 
-export default authRegisterController;
+export default validateTokenController;

@@ -17,22 +17,10 @@ import { jwt, validation } from '@/utils';
 const authRegisterService = async ( req ) => {
   const { email = '', password = '', name = '' } = req.body;
 
-  if ( !validation.isValidEmail( email ) ) return {
-    statusCode: 400,
-    ok: false,
-    message: 'El correo electrónico no tiene un formato permitido'
-  }
+  const validationError = validateReqBody({ email, password, name });
 
-  if ( password.length < 6 ) return {
-    statusCode: 400,
-    ok: false,
-    message: 'La contraseña debe de tener al menos 6 carácteres'
-  }
-
-  if ( name.length < 3 ) return {
-    statusCode: 400,
-    ok: false,
-    message: 'El nombre debe de tener al menos 2 carácteres'
+  if ( validationError ) {
+    return validationError;
   }
 
   try {
@@ -78,5 +66,28 @@ const authRegisterService = async ( req ) => {
     console.log( `${ '[SERVICE.AUTH-LOGIN]'.bgRed }: ${ error }` );
   }
 }
+
+const validateReqBody = ({ email = '', password = '', name = '' }) => {
+  if ( !validation.isValidEmail( email ) ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'El correo electrónico no tiene un formato permitido'
+  }
+  
+  if ( password.length < 6 ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'La contraseña debe de tener al menos 6 caracteres'
+  }
+
+  if ( name.length < 3 ) return {
+    statusCode: 400,
+    ok: false,
+    message: 'El nombre debe de tener al menos 3 caracteres'
+  }
+
+  return null;
+}
+
 
 export default authRegisterService;
