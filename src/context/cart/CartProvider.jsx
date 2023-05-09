@@ -7,6 +7,7 @@ import { CartContext, cartReducer } from './';
 
 
 const CART_INITIAL_STATE =	{
+  isLoaded: false,
   cart: [],
   numberOfItems: 0,
   subTotal: 0,
@@ -24,13 +25,13 @@ export const CartProvider = ({ children }) => {
         : [];
 
       dispatch({
-        type: '[CART] - Update Products In Cart',
+        type: '[CART] - Load Cart From Cookies | storage',
         payload: cookieProducts
       });
     
     } catch ( error ) {
       dispatch({
-        type: '[CART] - Update Products In Cart',
+        type: '[CART] - Load Cart From Cookies | storage',
         payload: []
       });
     }

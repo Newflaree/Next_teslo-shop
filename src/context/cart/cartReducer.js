@@ -3,6 +3,7 @@ export const cartReducer = ( state, action ) => {
     case '[CART] - Load Cart From Cookies | storage':
       return {
         ...state,
+        isLoaded: true,
         cart: [ ...action.payload ]
       }
 
