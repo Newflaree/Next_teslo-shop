@@ -29,7 +29,7 @@ import { validation } from '@/utils';
 
 
 const LoginPage = () => {
-  const { replace } = useRouter();
+  const { replace, query } = useRouter();
   const { loginUser } = useContext( AuthContext );
   const [ showError, setShowError ] = useState( false );
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -45,7 +45,9 @@ const LoginPage = () => {
       return;
     }
 
-    replace( '/' );
+    const destination = query.page?.toString() || '/';
+
+    replace( destination );
   }
 
   return (
@@ -152,7 +154,7 @@ const LoginPage = () => {
               justifyContent='end'
             >
               <NextLink
-                href='/auth/register'
+                href={ query.page ? `/auth/register?page=${ query.page }` : '/auth/register' }
                 passHref
                 legacyBehavior
               >

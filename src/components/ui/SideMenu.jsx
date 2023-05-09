@@ -37,7 +37,7 @@ export const SideMenu = () => {
   const router = useRouter();
   const [ searchTerm, setSearchTerm ] = useState( '' );
   const { isMenuOpen, toggleSideMenu } = useContext( UIContext );
-  const { isLoggedIn, user } = useContext( AuthContext );
+  const { isLoggedIn, user = { role: '' }, logoutUser } = useContext( AuthContext );
 
   const navigateTo = ( url ) => {
     toggleSideMenu();
@@ -48,6 +48,7 @@ export const SideMenu = () => {
     if ( searchTerm.trim().length === 0 ) return;
     navigateTo( `/search/${ searchTerm }` )
   }
+
 
   return (
     <Drawer
@@ -142,7 +143,10 @@ export const SideMenu = () => {
           {
             isLoggedIn
               ? (
-                <ListItem button>
+                <ListItem
+                  button
+                  onClick={ logoutUser }
+                >
                   <ListItemIcon>
                     <LoginOutlined/>
                   </ListItemIcon>
@@ -151,7 +155,10 @@ export const SideMenu = () => {
 
               )
               : (
-                <ListItem button>
+                <ListItem
+                  button
+                  onClick={ () => navigateTo( `/auth/login?page=${ router.asPath }` ) }
+                >
                   <ListItemIcon>
                     <VpnKeyOutlined/>
                   </ListItemIcon>

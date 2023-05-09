@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
 
   /*
   useEffect( () => {
-    Cookie.set( 'cart', JSON.stringify( state.cart ) );
+    Cookie.set( 'cart', JSON.stringify( state.cart ) ) || JSON.stringify( [] );
   }, [ state.cart ] );
     * */
   
