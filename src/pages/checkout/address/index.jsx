@@ -11,6 +11,9 @@ import {
 } from '@mui/material';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
+// Utils
+import { jwt } from '@/utils';
+import {redirect} from 'next/dist/server/api-utils';
 
 
 const AddressPage = () => {
@@ -155,5 +158,34 @@ const AddressPage = () => {
     </ShopLayout>
   );
 }
+
+
+export const getServerSideProps = async ({ req }) => {
+  const { token } = req.cookies;
+  let isValidToken = false;
+
+  try {
+    await jwt.isValidToken( token );
+    isValidToken = true;
+
+  } catch ( error ) {
+    isValidToken = false;
+  }
+
+  if ( !isValidToken ) {
+    return {
+      redirect: {
+        destination: '/auth/login?page=/checkout/address',
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {
+    }
+  }
+}
+
 
 export default AddressPage;
