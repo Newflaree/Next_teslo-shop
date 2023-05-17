@@ -36,6 +36,12 @@ export const cartReducer = ( state, action ) => {
         ...action.payload
       }
 
+    case '[CART] - Load Addres From Cookies | storage':
+      return {
+        ...state,
+        shippingAddress: action.payload
+      }
+
     default: 
       return state;
   }

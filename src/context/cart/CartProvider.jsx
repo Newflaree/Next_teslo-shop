@@ -12,7 +12,8 @@ const CART_INITIAL_STATE =	{
   numberOfItems: 0,
   subTotal: 0,
   tax: 0,
-  total: 0
+  total: 0,
+  shippingAddress: undefined
 }
 
 export const CartProvider = ({ children }) => {
@@ -34,6 +35,27 @@ export const CartProvider = ({ children }) => {
         type: '[CART] - Load Cart From Cookies | storage',
         payload: []
       });
+    }
+  }, [] );
+
+  useEffect( () => {
+    if ( Cookie.get( 'firstName' ) ) {
+
+      const shippingAddressFromCookies = {
+        firstName: Cookie.get( 'firstName' ) || '',
+        lastName: Cookie.get( 'lastName' ) || '',
+        address: Cookie.get( 'address' ) || '',
+        address2: Cookie.get( 'address2' ) || '',
+        zip: Cookie.get( 'zip' ) || '',
+        city: Cookie.get( 'city' ) || '',
+        country: Cookie.get( 'country' ) || '',
+        phone: Cookie.get( 'phone' ) || ''
+      }
+
+      dispatch({
+        type: '[CART] - Load Addres From Cookies | storage',
+        payload: shippingAddressFromCookies
+      })
     }
   }, [] );
 
