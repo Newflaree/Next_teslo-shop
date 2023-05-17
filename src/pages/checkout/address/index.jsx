@@ -32,7 +32,7 @@ const getAddressForCookies = () => {
     address2: Cookies.get( 'address2' ) || '',
     zip: Cookies.get( 'zip' ) || '',
     city: Cookies.get( 'city' ) || '',
-    country: Cookies.get( 'country' ) || '',
+    country: Cookies.get( 'country' ) || countries[0].code,
     phone: Cookies.get( 'phone' ) || ''
   }
 }
@@ -179,7 +179,7 @@ const AddressPage = () => {
                 select
                 variant='filled'
                 label='Pais'
-                defaultValue={ Cookies.get( 'country' ) || countries[0].code }
+                defaultValue={ Cookies.get( 'country' ) || Cookies[0].code }
                 { ...register( 'country', {
                   required: 'Este campo es requerido',
                 }) }
@@ -192,7 +192,7 @@ const AddressPage = () => {
                       key={ country.code }
                       value={ country.code }
                     >
-                      { country.name }
+                      { country.name || Cookies[0].name }
                     </MenuItem>
                   ))
                 }

@@ -88,6 +88,15 @@ export const AuthProvider = ({ children }) => {
     //dispatch({ type: '[AUTH] - Logout' })
     Cookie.remove( 'token' );
     Cookie.remove( 'cart' );
+    Cookie.remove( 'firstName' );
+    Cookie.remove( 'lastName' );
+    Cookie.remove( 'address' );
+    Cookie.remove( 'address2' );
+    Cookie.remove( 'zip' );
+    Cookie.remove( 'city' );
+    Cookie.remove( 'country' );
+    Cookie.remove( 'phone' );
+
     router.reload();
   }
 
