@@ -36,6 +36,7 @@ export const cartReducer = ( state, action ) => {
         ...action.payload
       }
 
+    case '[CART] - Update Shipping Address':
     case '[CART] - Load Addres From Cookies | storage':
       return {
         ...state,

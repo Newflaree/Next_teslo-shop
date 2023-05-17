@@ -40,7 +40,6 @@ export const CartProvider = ({ children }) => {
 
   useEffect( () => {
     if ( Cookie.get( 'firstName' ) ) {
-
       const shippingAddressFromCookies = {
         firstName: Cookie.get( 'firstName' ) || '',
         lastName: Cookie.get( 'lastName' ) || '',
@@ -151,6 +150,22 @@ export const CartProvider = ({ children }) => {
     Cookie.set( 'cart', JSON.stringify( state.cart ) );
   }
 
+  const updateAddress = ( address ) => {
+    Cookie.set( 'firstName', address.firstName );
+    Cookie.set( 'lastName', address.lastName );
+    Cookie.set( 'address', address.address );
+    Cookie.set( 'address2', address.address2 || '' );
+    Cookie.set( 'zip', address.zip );
+    Cookie.set( 'city', address.city );
+    Cookie.set( 'country', address.country );
+    Cookie.set( 'phone', address.phone );
+
+    dispatch({
+      type: '[CART] - Update Shipping Address',
+      payload: address
+    })
+  }
+
 
   return (
     <CartContext.Provider
@@ -159,7 +174,8 @@ export const CartProvider = ({ children }) => {
         // Methods
         addProductToCart,
         removeCartProduct,
-        updateCartQuantity
+        updateCartQuantity,
+        updateAddress
       }}
     >
       { children }
