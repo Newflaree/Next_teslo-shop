@@ -2,6 +2,8 @@
 import { useEffect, useReducer } from 'react';
 // Next.js
 import { useRouter } from 'next/router';
+// Next Auth
+import { useSession } from 'next-auth/react';
 // Axios
 import axios from 'axios';
 // JS Cookie
@@ -19,12 +21,23 @@ const AUTH_INITIAL_STATE =	{
 }
 
 export const AuthProvider = ({ children }) => {
-  const router = useRouter();
+  const { data, status } = useSession();
   const [ state, dispatch ] = useReducer( authReducer, AUTH_INITIAL_STATE );
+  const router = useRouter();
 
+  useEffect( () => {
+    if ( status === 'authenticated' ) {
+      console.log({ user: data?.user });
+    }
+
+    // TODO: dispatch
+  }, [ status, data ] )
+
+  /*
   useEffect( () => {
     checkToken();
   }, [] );
+    * */
 
   const checkToken = async () => {
     if ( !Cookie.get( 'token' ) ) return;
