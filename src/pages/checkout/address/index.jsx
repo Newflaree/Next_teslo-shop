@@ -12,8 +12,7 @@ import {
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 // Utils
-import { jwt } from '@/utils';
-import {redirect} from 'next/dist/server/api-utils';
+import { countries } from '@/utils';
 
 
 const AddressPage = () => {
@@ -117,12 +116,18 @@ const AddressPage = () => {
             <Select
               variant='filled'
               label='Pais'
-              value={ 1 }
+              value={ 'CHL' }
             >
-              <MenuItem value={ 1 }>Costa Rica</MenuItem>
-              <MenuItem value={ 2 }>Honduras</MenuItem>
-              <MenuItem value={ 3 }>El Salvador</MenuItem>
-              <MenuItem value={ 4 }>México</MenuItem>
+              {
+                countries.map( country => (
+                  <MenuItem
+                    key={ country.code }
+                    value={ country.code }
+                  >
+                    { country.name }
+                  </MenuItem>
+                ))
+              }
             </Select>
           </FormControl>
         </Grid>
