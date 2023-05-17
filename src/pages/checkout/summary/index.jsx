@@ -1,3 +1,5 @@
+// React
+import { useContext } from 'react';
 // Next.js
 import NextLink from 'next/link';
 // Material UI
@@ -16,11 +18,30 @@ import {
   CartList,
   CartOrderSumary
 } from '@/components/cart';
+// Context
+import { CartContext } from '@/context';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
+// Utils
+import { countries } from '@/utils';
 
 
 const SummaryPage = () => {
+  const { shippingAddress, numberOfItems } = useContext( CartContext );
+
+  if ( !shippingAddress ) return <></>;
+
+  const {
+    firstName,
+    lastName,
+    address,
+    address2,
+    zip,
+    city,
+    country,
+    phone
+  } = shippingAddress;
+
   return (
     <ShopLayout
       title='Resumen de orden'
@@ -51,7 +72,9 @@ const SummaryPage = () => {
         >
           <Card className='sumary-card'>
             <CardContent>
-              <Typography variant='h2'>Resumen ( 3 productos )</Typography>
+              <Typography variant='h2'>
+                Resumen ( { numberOfItems } { numberOfItems === 1 ? 'producto' : 'productos' } )
+              </Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box
@@ -73,11 +96,16 @@ const SummaryPage = () => {
                 </NextLink>
               </Box>
 
-              <Typography>Camilo López</Typography>
-              <Typography>323 Algún lugar</Typography>
-              <Typography>Stitteville, HYA 235</Typography>
-              <Typography>Canadá</Typography>
-              <Typography>+1 73122332</Typography>
+              <Typography>{ `${ firstName } ${ lastName }` }</Typography>
+              <Typography>{ address }</Typography>
+              {
+                address2 && (
+                  <Typography>{ address2 }</Typography>
+                )
+              }
+              <Typography>{ city }, { zip }</Typography>
+              <Typography>{ countries.find( c => c.code === country )?.name }</Typography>
+              <Typography>{ phone }</Typography>
 
               <Divider sx={{ my: 1 }} />
 
