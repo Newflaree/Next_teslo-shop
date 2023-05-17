@@ -160,6 +160,7 @@ const AddressPage = () => {
 }
 
 
+/*
 export const getServerSideProps = async ({ req }) => {
   const { token } = req.cookies;
   let isValidToken = false;
@@ -186,6 +187,7 @@ export const getServerSideProps = async ({ req }) => {
     }
   }
 }
+  * */
 
 
 export default AddressPage;
