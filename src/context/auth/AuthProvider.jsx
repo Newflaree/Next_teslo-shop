@@ -3,7 +3,7 @@ import { useEffect, useReducer } from 'react';
 // Next.js
 import { useRouter } from 'next/router';
 // Next Auth
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 // Axios
 import axios from 'axios';
 // JS Cookie
@@ -27,10 +27,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect( () => {
     if ( status === 'authenticated' ) {
-      console.log({ user: data?.user });
+      console.log({ user: data.user });
+      dispatch({
+        type: '[AUTH] - Login',
+        payload: data.user
+      });
     }
-
-    // TODO: dispatch
   }, [ status, data ] )
 
   /*
@@ -99,7 +101,6 @@ export const AuthProvider = ({ children }) => {
 
   const logoutUser = () => {
     //dispatch({ type: '[AUTH] - Logout' })
-    Cookie.remove( 'token' );
     Cookie.remove( 'cart' );
     Cookie.remove( 'firstName' );
     Cookie.remove( 'lastName' );
@@ -110,7 +111,11 @@ export const AuthProvider = ({ children }) => {
     Cookie.remove( 'country' );
     Cookie.remove( 'phone' );
 
+    signOut();
+    /*
     router.reload();
+    Cookie.remove( 'token' );
+      * */
   }
 
   return (
