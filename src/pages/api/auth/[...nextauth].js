@@ -54,7 +54,7 @@ export const authOptions = {
             break;
         
           case 'oauth':
-            //TODO: Crear usuario o verificar si existe en mi DB
+            token.user = await dbUsers.oAuthToDbUser( user.email, user.name );
             break;
         
           default:

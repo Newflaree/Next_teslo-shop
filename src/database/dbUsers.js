@@ -27,3 +27,50 @@ export const checkUserEmailPassword = async ( email = '', password = '' ) => {
     console.log( `${ '[DATABASE.CHECK-USER-EMAIL-PASSWORD]'.bgRed }: ${ error }` );
   }
 }
+
+
+export const oAuthToDbUser = async ( oAuthEmail = '', oAuthName = '' ) => {
+  try {
+    await db.connect();
+    const user = await User.findOne({ email: oAuthEmail });
+
+    if ( user ) {
+      await db.disconnect();
+      const { _id, name, email, role } = user;
+
+      return {
+        _id,
+        name,
+        email,
+        role
+      }
+    }
+
+    const newUser = new User({
+      email: oAuthEmail,
+      name: oAuthName,
+      password: '@',
+      role: 'CLIENT_ROLE'
+    });
+
+    await newUser.save();
+    await db.disconnect();
+
+    const {
+      _id,
+      name,
+      email,
+      role
+    } = newUser;
+
+    return {
+      _id,
+      name,
+      email,
+      role
+    }
+  
+  } catch ( error ) {
+    console.log( `${ '[DATABASE.O-AUTH-TO-DB-USER]'.bgRed }: ${ error }` );
+  }
+}
