@@ -21,7 +21,7 @@ export const authOptions = {
         },
       },
       async authorize( credentials ) {
-        console.log({ credentials });
+        console.log( 'CREDENTIALS:', { credentials });
         //TODO: Validar contra base de datos
 
         return { name: 'Hector', email: 'test3@email.com', role: 'CLIENT_ROLE'  };
@@ -40,7 +40,33 @@ export const authOptions = {
   */
   // Callbacks
   callbacks: {
+    async jwt({ token, account, user }) {
+      if ( account ) {
+        token.accessToken = account.access_token;
 
+        switch ( account.type ) {
+          case 'credentials':
+            token.user = user;
+            break;
+        
+          case 'oauth':
+            //TODO: Crear usuario o verificar si existe en mi DB
+            break;
+        
+          default:
+            return;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token, user }) {
+      session.accessToken = token.accessToken;
+      session.user = token.user;
+
+      return session;
+    }
   }
 }
 
