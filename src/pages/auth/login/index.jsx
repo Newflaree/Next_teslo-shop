@@ -1,10 +1,14 @@
 // React
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // Next.js
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // NextAuth
-import { getSession, signIn } from 'next-auth/react';
+import {
+  getProviders,
+  getSession,
+  signIn
+} from 'next-auth/react';
 // Material UI
 import {
   Box,
@@ -13,7 +17,8 @@ import {
   Grid,
   TextField,
   Typography,
-  Chip
+  Chip,
+  Divider
 } from '@mui/material';
 // Material Icons
 import { ErrorOutline } from '@mui/icons-material';
@@ -34,7 +39,16 @@ const LoginPage = () => {
   const { replace, query } = useRouter();
   const { loginUser } = useContext( AuthContext );
   const [ showError, setShowError ] = useState( false );
+  const [ providers, setProviders ] = useState({});
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  useEffect( () => {
+    getProviders()
+      .then( prov => {
+        console.log({ prov });
+        setProviders( prov );
+      });
+  }, [] );
 
   const onLoginUser = async ({ email, password }) => {
     setShowError( false );
@@ -170,6 +184,38 @@ const LoginPage = () => {
                   ¿No tienes cuenta?
                 </Link>
               </NextLink>
+            </Grid>
+
+            <Grid
+              item
+              xs={ 12 }
+              display='flex'
+              flexDirection='column'
+              justifyContent='end'
+            >
+              <Divider sx={{ width: '100%', mb: 2 }}/>
+
+              {
+                Object.values( providers ).map( ( provider ) => {
+                  if ( provider.id === 'credentials' ) return;
+
+                  return (
+                    <Button
+                      key={ provider.id }
+                      variant='outlined'
+                      fullWidth
+                      color='primary'
+                      sx={{
+                        mb: 1
+                      }}
+                      onClick={ () => signIn( provider.id ) }
+                    >
+                      { provider.name }
+                    </Button>
+                  )
+                })
+              }
+
             </Grid>
           </Grid>
         </Box>
