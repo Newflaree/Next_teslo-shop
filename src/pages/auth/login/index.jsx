@@ -3,6 +3,8 @@ import { useContext, useState } from 'react';
 // Next.js
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+// NextAuth
+import { getSession, signIn } from 'next-auth/react';
 // Material UI
 import {
   Box,
@@ -37,6 +39,7 @@ const LoginPage = () => {
   const onLoginUser = async ({ email, password }) => {
     setShowError( false );
 
+    /*
     const isValidLogin = await loginUser( email, password );
 
     if ( !isValidLogin ) {
@@ -48,6 +51,8 @@ const LoginPage = () => {
     const destination = query.page?.toString() || '/';
 
     replace( destination );
+      * */
+    await signIn( 'credentials', { email, password });
   }
 
   return (
@@ -171,6 +176,25 @@ const LoginPage = () => {
       </form>
     </AuthLayout>
   );
+}
+
+
+export const getServerSideProps = async ({ req, query }) => {
+  const session = await getSession({ req });
+  const { page = '/' } = query;
+
+  if ( session ) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 

@@ -1,7 +1,9 @@
+// Next Auth
 import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
-import {dbUsers} from '@/database';
+// DataBase
+import { dbUsers } from '@/database';
 
 
 export const authOptions = {
@@ -22,7 +24,6 @@ export const authOptions = {
         },
       },
       async authorize( credentials ) {
-        console.log( 'CREDENTIALS:', { credentials });
         //return { name: 'Hector', email: 'test3@email.com', role: 'CLIENT_ROLE'  };
         //TODO: Validar contra base de datos
         return await dbUsers.checkUserEmailPassword(
@@ -42,6 +43,11 @@ export const authOptions = {
     secret: process.env.JWT_SECRET_SEED || ''
   },
   */
+  // Custom Pages
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register'
+  },
   // Callbacks
   callbacks: {
     async jwt({ token, account, user }) {
