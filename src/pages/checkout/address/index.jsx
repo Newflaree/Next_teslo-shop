@@ -1,5 +1,5 @@
 // React
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 // Next.js
 import { useRouter } from 'next/router';
 // Material UI
@@ -24,7 +24,7 @@ import { ShopLayout } from '@/components/layouts';
 import { countries } from '@/utils';
 
 
-const getAddressForCookies = () => {
+const getAddressFromCookies = () => {
   return {
     firstName: Cookies.get( 'firstName' ) || '',
     lastName: Cookies.get( 'lastName' ) || '',
@@ -40,9 +40,22 @@ const getAddressForCookies = () => {
 const AddressPage = () => {
   const router = useRouter();
   const { updateAddress } = useContext( CartContext )
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: getAddressForCookies()
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      address: '',
+      address2: '',
+      zip: '',
+      city: '',
+      country: countries[0].code,
+      phone: ''
+    }
   });
+
+  useEffect( () => {
+    reset( getAddressFromCookies() );
+  }, [ reset ] );
 
   const onSubmitAddress = ( data ) => {
     updateAddress( data );
