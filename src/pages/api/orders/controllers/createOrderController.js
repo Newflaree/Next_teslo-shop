@@ -1,5 +1,6 @@
 // Database
 // Services
+import { createOrderService } from '../services';
 
 
 /**
@@ -15,9 +16,11 @@
  */
 const createOrderController = async ( req, res ) => {
   try {
+    const { body } = await createOrderService( req );
+
     res.status( 201 ).json({
       ok: true,
-      message: 'createOrderController'
+      body
     });
   
   } catch ( error ) {

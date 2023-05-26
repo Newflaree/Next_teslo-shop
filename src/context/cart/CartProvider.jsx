@@ -170,8 +170,23 @@ export const CartProvider = ({ children }) => {
   }
 
   const createOrder = async () => {
+    if ( !state.shippingAddress ) throw new Error( 'There is no address to send' )
+    
+    const body = {
+      orderItems: state.cart.map( p => ({
+        ...p,
+        size: p.size
+      })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.numberOfItems,
+      subTotal: state.subTotal,
+      tax: state.tax,
+      total: state.total,
+      isPaid: false
+    }
+
     try {
-      const { data } = await tesloApi.post( '/orders', {});
+      const { data } = await tesloApi.post( '/orders', body );
       console.log({ data });
     
     } catch ( error ) {
