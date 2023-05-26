@@ -2,6 +2,9 @@
 import { useEffect, useReducer } from 'react';
 // Cookies
 import Cookie from 'js-cookie';
+//
+// Api
+import { tesloApi } from '@/api';
 // Context
 import { CartContext, cartReducer } from './';
 
@@ -166,6 +169,16 @@ export const CartProvider = ({ children }) => {
     })
   }
 
+  const createOrder = async () => {
+    try {
+      const { data } = await tesloApi.post( '/orders', {});
+      console.log({ data });
+    
+    } catch ( error ) {
+      console.log({ error });
+    }
+  }
+
 
   return (
     <CartContext.Provider
@@ -173,6 +186,7 @@ export const CartProvider = ({ children }) => {
         ...state,
         // Methods
         addProductToCart,
+        createOrder,
         removeCartProduct,
         updateCartQuantity,
         updateAddress
