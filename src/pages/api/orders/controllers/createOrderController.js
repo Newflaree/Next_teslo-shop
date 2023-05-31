@@ -16,11 +16,11 @@ import { createOrderService } from '../services';
  */
 const createOrderController = async ( req, res ) => {
   try {
-    const { body } = await createOrderService( req );
+    const { statusCode, ok, message } = await createOrderService( req, res );
 
-    res.status( 201 ).json({
-      ok: true,
-      body
+    res.status( statusCode ).json({
+      ok,
+      message
     });
   
   } catch ( error ) {
