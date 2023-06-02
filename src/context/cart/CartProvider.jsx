@@ -1,5 +1,7 @@
 // React
 import { useEffect, useReducer } from 'react';
+// Axios
+import axios from 'axios';
 // Cookies
 import Cookie from 'js-cookie';
 //
@@ -187,10 +189,24 @@ export const CartProvider = ({ children }) => {
 
     try {
       const { data } = await tesloApi.post( '/orders', body );
+      // TODO: Dispatch
       console.log({ data });
+      return {
+        hasError: false,
+        message: data.newOrder._id
+      }
+
     
     } catch ( error ) {
-      console.log({ error });
+      if ( axios.isAxiosError( error ) ) return {
+        hasError: true,
+        message: error.response?.data.message
+      }
+
+      return {
+        hasError: true,
+        message: 'Error no controlado, Hable con el administrador'
+      }
     }
   }
 
