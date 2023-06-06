@@ -1,5 +1,7 @@
 // Next.js
 import NextLink from 'next/link';
+// Next Auth
+import { getSession } from 'next-auth/react';
 // Material UI
 import {
   Box,
@@ -13,7 +15,6 @@ import {
 } from '@mui/material';
 // Material Icons
 import {
-  CreditCardOutlined,
   CreditScoreOutlined
 } from '@mui/icons-material';
 // Components
@@ -21,11 +22,15 @@ import {
   CartList,
   CartOrderSumary
 } from '@/components/cart';
+// Database
+import { dbOrders } from '@/database';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 
 
-const OrderPage = () => {
+const OrderPage = ({ currentOrder }) => {
+  console.log({ currentOrder });
+
   return (
     <ShopLayout
       title='Resumen de la orden 123451234'
@@ -152,6 +157,43 @@ const OrderPage = () => {
       </Grid>
     </ShopLayout>
   );
+}
+
+export const getServerSideProps = async ({ req, query }) => {
+  const { id = '' } = query;
+
+  const session = await getSession({ req });
+
+  if ( !session ) return {
+    redirect: {
+      destination: `/auth/login?page=/orders/${ id }`,
+      permanent: false
+    }
+  }
+
+  const currentOrder = await dbOrders.getOrderById( id.toString() );
+
+  console.log({ currentOrder });
+  if ( !currentOrder ) return {
+    redirect: {
+      destination: '/orders/history',
+      permanent: false
+    }
+  }
+
+  if ( session.user._id !== currentOrder.order.user ) return {
+    redirect: {
+      destination: '/orders/history',
+      permanent: false
+    }
+  }
+
+
+  return {
+    props: {
+      currentOrder: currentOrder.order
+    },
+  }
 }
 
 export default OrderPage;
