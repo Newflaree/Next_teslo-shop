@@ -18,7 +18,9 @@ import { ItemCounter } from '../ui';
 import { CartContext } from '@/context';
 
 
-export const CartList = ({ editable = false }) => {
+export const CartList = ({ editable = false, products }) => {
+
+  console.log({ products });
   const { cart, updateCartQuantity, removeCartProduct } = useContext( CartContext )
 
   const onNewCartQuantityValue = ( product, newQuantityValue ) => {
@@ -27,11 +29,13 @@ export const CartList = ({ editable = false }) => {
     updateCartQuantity( product );
   }
 
+  const productToShow = products ? products : cart;
+
 
   return (
     <>
       {
-        cart.map( product => (
+        productToShow.map( product => (
           <Grid
             key={ product.slug + product.size }
             container
