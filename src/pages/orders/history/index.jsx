@@ -15,15 +15,6 @@ import { dbOrders } from '@/database';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 
-const rows = [
-  { id: 1, paid: true, fullname: 'Camilo López' },
-  { id: 2, paid: false, fullname: 'Test 1' },
-  { id: 3, paid: true, fullname: 'Test 2' },
-  { id: 4, paid: false, fullname: 'Test 3' },
-  { id: 5, paid: false, fullname: 'Test 4' },
-  { id: 6, paid: true, fullname: 'Test 5' },
-  { id: 7, paid: false, fullname: 'Test 6' },
-];
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -49,7 +40,7 @@ const columns = [
     renderCell: ( params ) => {
       return (
         <NextLink
-          href={ `/orders/${ params.row.id }` }
+          href={ `/orders/${ params.row.orderId }` }
           passHref
           legacyBehavior
         >
@@ -66,7 +57,12 @@ const columns = [
 ];
 
 export const HistoryPage = ({ orders }) => {
-  console.log( orders );
+  const rows = orders.orders.map( ( order, index ) => ({
+    id: index + 1,
+    paid: order.isPaid,
+    fullname: `${ order.shippingAddress.firstName } ${ order.shippingAddress.lastName}`,
+    orderId: order._id
+  }));
 
   return (
     <ShopLayout
@@ -82,6 +78,7 @@ export const HistoryPage = ({ orders }) => {
 
       <Grid
         container
+        className='fadeIn'
       >
         <Grid
           item
