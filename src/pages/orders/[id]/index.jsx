@@ -116,36 +116,36 @@ const OrderPage = ({ currentOrder }) => {
               <Divider sx={{ my: 1 }} />
 
 
-              <CartOrderSumary />
+              <CartOrderSumary
+                orderValues={{
+                  numberOfItems: currentOrder.numberOfItems,
+                  subTotal: currentOrder.subtotal,
+                  total: currentOrder.total,
+                  tax: currentOrder.tax
+                }}
+              />
 
               <Box
+                display='flex'
+                flexDirection='column'
                 sx={{ mt: 3 }}
               >
-                <h1>Pagar</h1>
 
                 {
                   isPaid 
                     ? (
                       <Chip
-                      label='Pagada con éxito'
-                      variant='outlined'
-                      color='success'
-                      icon={ <CreditScoreOutlined /> }
-                      sx={{
-                        my: 2
-                      }}
-                    />
+                        label='Pagada con éxito'
+                        variant='outlined'
+                        color='success'
+                        icon={ <CreditScoreOutlined /> }
+                        sx={{
+                          my: 2
+                        }}
+                      />
                     )
                     : (
-                      <Chip
-                      label='Pendiente de pago'
-                      variant='outlined'
-                      color='error'
-                      icon={ <CreditCardOutlined /> }
-                      sx={{
-                        my: 2
-                      }}
-                    />
+                      <h1>Pagar</h1>
                     )
                 }
               </Box>
@@ -171,7 +171,6 @@ export const getServerSideProps = async ({ req, query }) => {
 
   const currentOrder = await dbOrders.getOrderById( id.toString() );
 
-  console.log({ currentOrder });
   if ( !currentOrder ) return {
     redirect: {
       destination: '/orders/history',

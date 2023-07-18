@@ -45,7 +45,7 @@ const columns = [
     renderCell: ( params ) => {
       return (
         <NextLink
-        href={ `/orders/${ params.row.id }` }
+          href={ `/orders/${ params.row.id }` }
           passHref
           legacyBehavior
         >

@@ -19,8 +19,6 @@ import { CartContext } from '@/context';
 
 
 export const CartList = ({ editable = false, products }) => {
-
-  console.log({ products });
   const { cart, updateCartQuantity, removeCartProduct } = useContext( CartContext )
 
   const onNewCartQuantityValue = ( product, newQuantityValue ) => {

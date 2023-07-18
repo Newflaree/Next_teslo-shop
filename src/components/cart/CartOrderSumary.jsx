@@ -7,8 +7,13 @@ import { CartContext } from '@/context';
 // Utils
 import { currency } from '@/utils';
 
-export const CartOrderSumary = () => {
+
+export const CartOrderSumary = ({ orderValues }) => {
   const { numberOfItems, subTotal, tax, total } = useContext( CartContext );
+
+  const summaryValues = !orderValues
+    ? { numberOfItems, subTotal, tax, total }
+    : orderValues;
 
 
   return (
@@ -28,7 +33,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          { numberOfItems } { numberOfItems > 1 ? 'productos' : 'producto' }
+          { summaryValues.numberOfItems } { summaryValues.numberOfItems > 1 ? 'productos' : 'producto' }
         </Typography>
       </Grid>
 
@@ -45,7 +50,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          { currency.format( subTotal ) }
+          { currency.format( summaryValues.subTotal ) }
         </Typography>
       </Grid>
       <Grid
@@ -63,7 +68,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography>
-          { currency.format( tax ) }
+          { currency.format( summaryValues.tax ) }
         </Typography>
       </Grid>
       <Grid
@@ -85,7 +90,7 @@ export const CartOrderSumary = () => {
         justifyContent='end'
       >
         <Typography variant='subtitle1'>
-          { currency.format( total ) }
+          { currency.format( summaryValues.total ) }
         </Typography>
       </Grid>
     </Grid>
