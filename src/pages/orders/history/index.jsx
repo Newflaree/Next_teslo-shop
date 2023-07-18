@@ -1,5 +1,7 @@
 // Next.js
 import NextLink from 'next/link';
+// Next Auth
+import { getSession } from 'next-auth/react';
 // Material UI
 import {
   Chip,
@@ -8,6 +10,8 @@ import {
   Typography
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+// Database
+import { dbOrders } from '@/database';
 // Layouts
 import { ShopLayout } from '@/components/layouts';
 
@@ -61,7 +65,9 @@ const columns = [
   }
 ];
 
-export const HistoryPage = () => {
+export const HistoryPage = ({ orders }) => {
+  console.log( orders );
+
   return (
     <ShopLayout
       title='Historial de ordenes'
@@ -93,6 +99,25 @@ export const HistoryPage = () => {
       </Grid>
     </ShopLayout>
   );
+}
+
+export const getServerSideProps = async ({ req }) => {
+  const session = await getSession({ req })
+
+  if ( !session ) return {
+    redirect: {
+      destination: '/auth/login?page=/orders/history',
+      permanent: false
+    }
+  }
+
+  const orders = await dbOrders.getOrdersByUser( session.user._id );
+
+  return {
+    props: {
+      orders
+    }
+  }
 }
 
 export default HistoryPage;
