@@ -37,7 +37,8 @@ const OrderPage = ({ currentOrder }) => {
     isPaid,
     numberOfItems,
     orderItems,
-    shippingAddress
+    shippingAddress,
+    total
   } = currentOrder;
 
   return (
@@ -153,7 +154,7 @@ const OrderPage = ({ currentOrder }) => {
                             purchase_units: [
                               {
                                 amount: {
-                                  value: "2000.19",
+                                  value: `${ total }`
                                 },
                               },
                             ],
@@ -162,8 +163,9 @@ const OrderPage = ({ currentOrder }) => {
                         onApprove={ ( data, actions ) => {
                           return actions.order.capture().then( ( details ) => {
                             console.log({ details });
+
                             const name = details.payer.name.given_name;
-                            alert( `Transaction completed by ${ name }` );
+                            //alert( `Transaction completed by ${ name }` );
                           });
                         }}
                       />
