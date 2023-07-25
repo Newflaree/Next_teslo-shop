@@ -14,9 +14,9 @@ import { payOrderService } from '../services';
  * @returns { void }
  */
 const payOrderController = async ( req, res ) => {
-  const { statusCode, ok, message } = await payOrderService( req );
-
   try {
+    const { statusCode, ok, message } = await payOrderService( req );
+
     res.status( statusCode ).json({
       ok,
       message
