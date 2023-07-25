@@ -14,11 +14,11 @@ import { payOrderService } from '../services';
  * @returns { void }
  */
 const payOrderController = async ( req, res ) => {
-  const { message } = await payOrderService( req );
+  const { statusCode, ok, message } = await payOrderService( req );
 
   try {
-    res.status( 200 ).json({
-      ok: true,
+    res.status( statusCode ).json({
+      ok,
       message
     });
   
