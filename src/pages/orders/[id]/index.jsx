@@ -1,5 +1,6 @@
+// React
+import { useState } from 'react';
 // Next.js
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // Next Auth
 import { getSession } from 'next-auth/react';
@@ -11,10 +12,10 @@ import {
   Card,
   CardContent,
   Divider,
-  Link,
   Grid,
   Typography,
-  Chip
+  Chip,
+  CircularProgress
 } from '@mui/material';
 // Material Icons
 import {
@@ -35,6 +36,7 @@ import { ShopLayout } from '@/components/layouts';
 
 
 const OrderPage = ({ currentOrder }) => {
+  const [ isPaying, setIsPaying ] = useState( false );
   const router = useRouter();
 
   const {
@@ -49,6 +51,8 @@ const OrderPage = ({ currentOrder }) => {
   const onOrderCompleted = async ( details ) => {
     if ( details.status !== 'COMPLETED' ) return alert( 'There is no payment in Paypal' );
 
+    setIsPaying( true );
+
     try {
       const { data } = await tesloApi.post( `/orders/pay`, {
         transactionId: details.id,
@@ -58,6 +62,8 @@ const OrderPage = ({ currentOrder }) => {
       router.reload();
     
     } catch ( error ) {
+      setIsPaying( false );
+
       console.log( error );
       alert( 'Error' );
     }
@@ -155,43 +161,62 @@ const OrderPage = ({ currentOrder }) => {
                 flexDirection='column'
                 sx={{ mt: 3 }}
               >
+                <Box
+                  display='flex'
+                  justifyContent='center'
+                  className='fadeIn'
+                  sx={{
+                    display: isPaying ? 'flex' : 'none'
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
 
-                {
-                  isPaid 
-                    ? (
-                      <Chip
-                        label='Pagada con éxito'
-                        variant='outlined'
-                        color='success'
-                        icon={ <CreditScoreOutlined /> }
-                        sx={{
-                          my: 2
-                        }}
-                      />
-                    )
-                    : (
-                      <PayPalButtons 
-                        createOrder={ ( data, actions ) => {
-                          return actions.order.create({
-                            purchase_units: [
-                              {
-                                amount: {
-                                  value: `${ total }`
+
+                <Box
+                  flexDirection='column'
+                  sx={{
+                    display: isPaying ? 'none' : 'flex',
+                    flex: 1 
+                  }}
+                >
+                  {
+                    isPaid 
+                      ? (
+                        <Chip
+                          label='Pagada con éxito'
+                          variant='outlined'
+                          color='success'
+                          icon={ <CreditScoreOutlined /> }
+                          sx={{
+                            my: 2
+                          }}
+                        />
+                      )
+                      : (
+                        <PayPalButtons 
+                          createOrder={ ( data, actions ) => {
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  amount: {
+                                    value: `${ total }`
+                                  },
                                 },
-                              },
-                            ],
-                          });
-                        }}
-                        onApprove={ ( data, actions ) => {
-                          return actions.order.capture().then( ( details ) => {
-                            onOrderCompleted( details )
-                            //const name = details.payer.name.given_name;
-                            //alert( `Transaction completed by ${ name }` );
-                          });
-                        }}
-                      />
-                    )
-                }
+                              ],
+                            });
+                          }}
+                          onApprove={ ( data, actions ) => {
+                            return actions.order.capture().then( ( details ) => {
+                              onOrderCompleted( details )
+                              //const name = details.payer.name.given_name;
+                              //alert( `Transaction completed by ${ name }` );
+                            });
+                          }}
+                        />
+                      )
+                  }
+                </Box>
               </Box>
             </CardContent>
           </Card>
