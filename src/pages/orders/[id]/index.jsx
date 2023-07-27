@@ -1,5 +1,6 @@
 // Next.js
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 // Next Auth
 import { getSession } from 'next-auth/react';
 // Paypal
@@ -20,6 +21,8 @@ import {
   CreditCardOutlined,
   CreditScoreOutlined
 } from '@mui/icons-material';
+// Api
+import { tesloApi } from '@/api';
 // Components
 import {
   CartList,
@@ -32,6 +35,8 @@ import { ShopLayout } from '@/components/layouts';
 
 
 const OrderPage = ({ currentOrder }) => {
+  const router = useRouter();
+
   const {
     _id,
     isPaid,
@@ -40,6 +45,23 @@ const OrderPage = ({ currentOrder }) => {
     shippingAddress,
     total
   } = currentOrder;
+
+  const onOrderCompleted = async ( details ) => {
+    if ( details.status !== 'COMPLETED' ) return alert( 'There is no payment in Paypal' );
+
+    try {
+      const { data } = await tesloApi.post( `/orders/pay`, {
+        transactionId: details.id,
+        orderId: _id
+      });
+       
+      router.reload();
+    
+    } catch ( error ) {
+      console.log( error );
+      alert( 'Error' );
+    }
+  }
 
   return (
     <ShopLayout
@@ -162,9 +184,8 @@ const OrderPage = ({ currentOrder }) => {
                         }}
                         onApprove={ ( data, actions ) => {
                           return actions.order.capture().then( ( details ) => {
-                            console.log({ details });
-
-                            const name = details.payer.name.given_name;
+                            onOrderCompleted( details )
+                            //const name = details.payer.name.given_name;
                             //alert( `Transaction completed by ${ name }` );
                           });
                         }}
