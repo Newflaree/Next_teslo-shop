@@ -1,5 +1,9 @@
+// React
+import { useEffect, useState } from 'react';
+// SWR
+import useSWR from 'swr';
 // Material UI
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 // Material Icons
 import {
   AccessTimeOutlined,
@@ -19,6 +23,39 @@ import { AdminLayout } from '@/components/layouts';
 
 
 const DashboardPage = () => {
+  const { data, error } = useSWR( '/api/admin/dashboard', {
+    refreshInterval: 30 * 1000
+  });
+
+  const [ refreshIn, setRefreshIn ] = useState( 30 );
+
+  useEffect( () => {
+    const interval = setInterval( () => {
+      setRefreshIn( refreshIn => refreshIn ? refreshIn -1 : 30 );
+    }, 1000 );
+
+    return () => clearInterval( interval )
+  }, [] );
+
+  if ( !error && !data ) {
+    return <></>
+  }
+
+  if ( error ) {
+    console.log( error );
+    return <Typography>Error al cargar la información</Typography>
+  }
+
+  const {
+    totalOrders,
+    paidOrders,
+    notPaidOrders,
+    totalClients,
+    totalProducts,
+    productsWithNoInventary,
+    productsWithLowInventary
+  } = data;
+
   return (
     <AdminLayout
       title='Dashoboard'
@@ -30,49 +67,49 @@ const DashboardPage = () => {
         spacing={ 2 }
       >
         <SummaryTail 
-          title={ 1 }
+          title={ totalOrders }
           subTitle='Ordenes totales'
           icon={ <CreditCardOutlined color='secondary' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 2 }
+          title={ paidOrders }
           subTitle='Ordenes Pagadas'
           icon={ <AttachMoneyOutlined color='success' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 3 }
+          title={ notPaidOrders }
           subTitle='Ordenes Pendientes'
           icon={ <CreditCardOffOutlined color='error' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 4 }
+          title={ totalClients }
           subTitle='Clientes'
           icon={ <GroupOutlined color='primary' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 5 }
+          title={ totalProducts }
           subTitle='Productos'
           icon={ <CategoryOutlined color='warning' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 6 }
+          title={ productsWithNoInventary }
           subTitle='Sin existencias'
           icon={ <CancelPresentationOutlined color='error' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 7 }
+          title={ productsWithLowInventary }
           subTitle='Bajo inventario'
           icon={ <ProductionQuantityLimitsOutlined color='warning' sx={{ fontSize: 40 }} /> }
         />
 
         <SummaryTail 
-          title={ 8 }
+          title={ refreshIn }
           subTitle='Actualización'
           icon={ <AccessTimeOutlined color='secondary' sx={{ fontSize: 40 }} /> }
         />
@@ -80,5 +117,7 @@ const DashboardPage = () => {
     </AdminLayout>
   );
 }
+
+
 
 export default DashboardPage;
