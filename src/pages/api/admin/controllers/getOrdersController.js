@@ -41,7 +41,7 @@ const getOrdersController = async ( req, res ) => {
       totalProducts,
       productsWithNoInventary,
       productsWithLowInventary
-    ] =await Promise.all([
+    ] = await Promise.all([
       getAllOrdersService(),
       getPaidOrdersService(),
       getNotPaidOrdersService(),

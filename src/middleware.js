@@ -1,4 +1,4 @@
-import {getToken} from "next-auth/jwt";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 
@@ -20,6 +20,77 @@ export async function middleware( req ) {
     }
   }
     * */
+  if ( req.nextUrl.pathname.startsWith( '/checkout' ) ) {
+    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || '' })
+    //  Información útil sobre el usuario
+    //console.log({ session });
+    if ( !session ) {
+      const requestedPage = req.nextUrl.pathname;
+      const url = req.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = `page=${ requestedPage }`
+
+      return NextResponse.redirect( url );
+    }
+   
+    return NextResponse.next();
+  }
+
+  if ( req.nextUrl.pathname.startsWith( '/admin' ) ) {
+    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || '' })
+    //  Información útil sobre el usuario
+    //console.log( session.user.role );
+    if ( !session ) {
+      const requestedPage = req.nextUrl.pathname;
+      const url = req.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = `page=${ requestedPage }`
+
+      return NextResponse.redirect( url );
+    }
+
+    const validRoles = [ 'ADMIN_ROLE' ];
+
+    if ( !validRoles.includes( session.user.role ) ) {
+      const url = req.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect( url )
+    }
+   
+    return NextResponse.next();
+  }
+
+  if ( req.nextUrl.pathname.startsWith( '/api/admin' ) ) {
+    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || '' });
+    if ( !session ) {
+      return new Response( JSON.stringify({
+        ok: false,
+        message: 'Unauthorized'
+      }), {
+        status: 401,
+        headers: {
+          'Content-Type':'application/json'
+        }
+      });
+    }
+
+    const validRoles = [ 'ADMIN_ROLE' ];
+
+    if ( !validRoles.includes( session.user.role ) ) {
+      return new Response( JSON.stringify({
+        ok: false,
+        message: 'Unauthorized'
+      }), {
+        status: 401,
+        headers: {
+          'Content-Type':'application/json'
+        }
+      });
+    }
+   
+    return NextResponse.next();
+  }
+  /*
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET || '' })
   //  Información útil sobre el usuario
   //console.log({ session });
@@ -33,11 +104,15 @@ export async function middleware( req ) {
   }
  
   return NextResponse.next();
+   * */
 }
 
+/*
 export const config = {
   matcher: [
     '/checkout/address',
-    '/checkout/summary'
+    '/checkout/summary',
+    '/checkout/summary',
   ]
 }
+  * */
