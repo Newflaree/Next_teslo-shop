@@ -1,3 +1,5 @@
+// React
+import { useEffect, useState } from 'react';
 // SWR
 import useSWR from 'swr';
 // Material UI
@@ -13,16 +15,30 @@ import { AdminLayout } from '@/components/layouts';
 
 const UsersPage = () => {
   const { data, error } = useSWR('/api/admin/users');
+  const [ users, setUsers ] = useState([]);
+
+  useEffect( () => {
+    if ( data ) {
+      setUsers( data.users );
+    }
+  }, [ data ] );
 
   if ( !data && !error ) return <></>
 
-  const { users } = data;
-
   const onRoleUpdated = async ( userId = '', newRole = '' ) => {
+    const previousUsers = users.map( user =>  ({ ...user }));
+    const updatedUsers = users.map( user => ({
+      ...user,
+      role: userId === user._id ? newRole : user.role
+    }));
+
+    setUsers( updatedUsers )
+
     try {
       await tesloApi.put( '/admin/users', { userId, role: newRole } )
 
     } catch ( error ) {
+      setUsers( previousUsers );
       console.log( error );
       alert( 'No se puedo actualizar el rol del usuario' )
     }
