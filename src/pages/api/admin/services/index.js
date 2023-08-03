@@ -5,3 +5,4 @@ export { default as getProductsWithLowInventaryService } from './getProductsWith
 export { default as getProductsWithNoInventaryService } from './getProductsWithNoInventaryService';
 export { default as getTotalClientsService } from './getTotalClientsService';
 export { default as getTotalProductsService } from './getTotalProductsService';
+export { default as getUsersService } from './getUsersService';
