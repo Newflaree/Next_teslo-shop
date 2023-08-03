@@ -1,10 +1,12 @@
 // SWR
 import useSWR from 'swr';
 // Material UI
-import { Grid } from '@mui/material';
+import { Grid, MenuItem, Select } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 // Material Icons
 import { PeopleOutlined } from '@mui/icons-material';
+// Api
+import { tesloApi } from '@/api';
 // Layouts
 import { AdminLayout } from '@/components/layouts';
 
@@ -15,6 +17,16 @@ const UsersPage = () => {
   if ( !data && !error ) return <></>
 
   const { users } = data;
+
+  const onRoleUpdated = async ( userId = '', newRole = '' ) => {
+    try {
+      await tesloApi.put( '/admin/users', { userId, role: newRole } )
+
+    } catch ( error ) {
+      console.log( error );
+      alert( 'No se puedo actualizar el rol del usuario' )
+    }
+  }
 
   const columns = [
     { 
@@ -30,8 +42,23 @@ const UsersPage = () => {
     { 
       field: 'role',
       headerName: 'Rol',
-      width: 300
-    },
+      width: 300,
+      renderCell: ({ row }) => {
+        return (
+          <Select
+            value={ row.role }
+            label='Rol'
+            onChange={ ({ target }) => onRoleUpdated( row.id, target.value ) }
+            sx={{
+              width: '300px'
+            }}
+          >
+            <MenuItem value='ADMIN_ROLE'>Admin</MenuItem>
+            <MenuItem value='CLIENT_ROLE'>Client</MenuItem>
+          </Select>
+        )
+      },
+    }
   ];
 
   const rows = users.map( user => ({
@@ -40,7 +67,6 @@ const UsersPage = () => {
     name: user.name,
     role: user.role
   }));
-
 
   return (
     <AdminLayout
