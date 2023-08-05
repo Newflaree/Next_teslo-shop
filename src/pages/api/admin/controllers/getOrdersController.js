@@ -23,16 +23,6 @@ import {
  */
 const getOrdersController = async ( req, res ) => {
   try {
-    /*
-    const { totalOrders } = await getAllOrdersService();
-    const { paidOrders } = await getPaidOrdersService();
-    const { notPaidOrders } = await getNotPaidOrdersService();
-    const { totalClients } = await getTotalClientsService();
-    const { totalProducts } = await getTotalProductsService();
-    const { productsWithNoInventary } = await getProductsWithNoInventaryService();
-    const { productsWithLowInventary } = await getProductsWithLowInventaryService();
-      * */
-
     const [
       totalOrders,
       paidOrders,

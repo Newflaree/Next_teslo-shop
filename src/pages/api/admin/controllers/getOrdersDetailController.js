@@ -1,5 +1,5 @@
 // Services
-import { updateUserService } from '../services';
+import getOrdersDetailsService from "../services/getOrdersDetailService";
 
 
 /**
@@ -13,17 +13,17 @@ import { updateUserService } from '../services';
  * @param { Object } res - The HTTP response object.
  * @returns { void }
  */
-const updateUserController = async ( req, res ) => {
+const getOrdersDetailController = async ( req, res ) => {
   try {
-    const { statusCode, ok, message } = await updateUserService( req );
+    const { totalOrders } = await getOrdersDetailsService();
 
-    res.status( statusCode ).json({
-      ok,
-      message
+    res.status( 200 ).json({
+      ok: true,
+      totalOrders
     });
   
   } catch ( error ) {
-    console.log( `${ '[CONTROLLER.UPDATE-USER]'.bgRed }: ${ error }` );
+    console.log( `${ '[CONTROLLER.GET-ORDERS-DETAILS]'.bgRed }: ${ error }` );
 
     res.status( 500 ).json({
       ok: false,
@@ -32,4 +32,4 @@ const updateUserController = async ( req, res ) => {
   }
 }
 
-export default updateUserController;
+export default getOrdersDetailController;

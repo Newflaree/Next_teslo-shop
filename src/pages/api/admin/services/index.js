@@ -6,3 +6,5 @@ export { default as getProductsWithNoInventaryService } from './getProductsWithN
 export { default as getTotalClientsService } from './getTotalClientsService';
 export { default as getTotalProductsService } from './getTotalProductsService';
 export { default as getUsersService } from './getUsersService';
+export { default as getOrdersDetailService } from './getOrdersDetailService';
+export { default as updateUserService } from './updateUserService';

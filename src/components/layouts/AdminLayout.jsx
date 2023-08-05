@@ -29,7 +29,7 @@ export const AdminLayout = ({ title, subTitle, icon, children }) => {
             component='h1'
           >
             { icon }
-            { title }
+            { ' ' }{ title }
           </Typography>
           <Typography
             variant='h2'
