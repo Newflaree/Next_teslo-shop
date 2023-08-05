@@ -19,7 +19,9 @@ const getOrdersDetailsService = async () => {
       .lean();
     await db.disconnect();
 
-    return totalOrders;
+    return {
+      totalOrders
+    };
 
   } catch ( error ) {
     await db.disconnect();
