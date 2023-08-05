@@ -1,3 +1,4 @@
+// SWR
 import useSWR from 'swr';
 // Material UI
 import { Chip, Grid } from '@mui/material';
@@ -27,11 +28,12 @@ const columns = [
   {
     field: 'total',
     headerName: 'Monto total',
-    width: 250
+    width: 150
   },
   {
     field: 'isPaid',
     headerName: 'Pagada',
+    width: 150,
     renderCell: ({ row }) => {
       return row.isPaid
         ? ( <Chip variant='outlined' label='Pagada' color='success' /> )
@@ -42,7 +44,7 @@ const columns = [
     field: 'nItems',
     headggerName: 'No. Productos',
     align: 'center',
-    width: 250
+    width: 100
   },
   {
     field: 'check',
