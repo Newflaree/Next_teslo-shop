@@ -1,7 +1,9 @@
+// Next.js
+import NextLink from 'next/link';
 // SWR
 import useSWR from 'swr';
 // Material UI
-import { CardMedia, Grid } from '@mui/material';
+import { CardMedia, Grid, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 // Material Icons
 import { CategoryOutlined } from '@mui/icons-material';
@@ -32,7 +34,20 @@ const columns = [
   {
     field: 'title',
     headerName: 'Titulo',
-    width: 250
+    width: 250,
+    renderCell: ({ row }) => {
+      return (
+        <NextLink
+          href={ `/admin/products/${ row.slug }` }
+          passHref
+          legacyBehavior
+        >
+          <Link underline='always'>
+            { row.title }
+          </Link>
+        </NextLink>
+      )
+    }
   },
   {
     field: 'gender',

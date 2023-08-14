@@ -28,6 +28,8 @@ export const getProductBySlug = async ( slug = '' ) => {
       return null;
     }
 
+    // TODO: Procesamiento de las imágenes cuando se suban al server
+
     return JSON.parse( JSON.stringify( productBySlug ) );
   
   } catch ( error ) {
