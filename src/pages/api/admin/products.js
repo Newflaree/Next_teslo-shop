@@ -1,10 +1,11 @@
 // Controllers
+import { getAdminProductsController } from './controllers';
 
 
 export default function handler( req, res ) {
   switch ( req.method ) {
     case 'GET':
-      return method( req, res );
+      return getAdminProductsController( req, res );
   
     case 'POST':
       return method( req, res );

@@ -1,5 +1,5 @@
 // Services
-import { getProductsService } from '../services';
+import { getAdminProductsService } from '../services';
 
 
 /**
@@ -13,9 +13,9 @@ import { getProductsService } from '../services';
  * @param { Object } res - The HTTP response object.
  * @returns { void }
  */
-const getProductsController = async ( req, res ) => {
+const getAdminProductsController = async ( req, res ) => {
   try {
-    const { products } = await getProductsService( req );
+    const { products } = await getAdminProductsService( req );
 
     res.status( 200 ).json({
       ok: true,
@@ -23,7 +23,7 @@ const getProductsController = async ( req, res ) => {
     });
   
   } catch ( error ) {
-    console.log( `${ '[CONTROLLER.GET-PRODUCTS]'.bgRed }: ${ error }` );
+    console.log( `${ '[CONTROLLER.GET-ADMIN-PRODUCTS]'.bgRed }: ${ error }` );
 
     res.status( 500 ).json({
       ok: false,
@@ -32,4 +32,4 @@ const getProductsController = async ( req, res ) => {
   }
 }
 
-export default getProductsController;
+export default getAdminProductsController;

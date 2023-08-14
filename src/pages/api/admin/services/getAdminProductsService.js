@@ -10,7 +10,7 @@ import { Product } from '@/models';
  * @param {Object} req - Express request object containing query parameters
  * @returns {Object} - An object containing the total count of products and an array of products
  */
-const getProductsService = async ( req ) => {
+const getAdminProductsService = async ( req ) => {
   try {
     await db.connect();
     const products = await Product.find()
@@ -26,8 +26,8 @@ const getProductsService = async ( req ) => {
     }
   } catch ( error ) {
     await db.disconnect();
-    console.log( `${ '[SERVICE.GET-PRODUCTS]'.bgRed }: ${ error }` );
+    console.log( `${ '[SERVICE.GET-ADMIN-PRODUCTS]'.bgRed }: ${ error }` );
   }
 }
 
-export default getProductsService;
+export default getAdminProductsService;

@@ -8,4 +8,4 @@ export { default as getTotalProductsService } from './getTotalProductsService';
 export { default as getUsersService } from './getUsersService';
 export { default as getOrdersDetailService } from './getOrdersDetailService';
 export { default as updateUserService } from './updateUserService';
-export { default as getProductsService } from './getPaidOrdersService';
+export { default as getAdminProductsService } from './getAdminProductsService';
