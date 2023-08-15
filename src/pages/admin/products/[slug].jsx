@@ -1,3 +1,5 @@
+// React Hook Form
+import { useForm } from 'react-hook-form';
 // Material UI
 import {
   Box,
@@ -34,9 +36,19 @@ const validTypes  = [ 'shirts', 'pants', 'hoodies', 'hats' ];
 const validGender = [ 'men', 'women', 'kid', 'unisex' ];
 const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
+
 const ProductAdminPage = ({ product }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: product
+  });
+
   const onDeleteTag = ( tag ) => {
     // Write your code here
+  }
+
+  const onSubmit = ( formData ) => {
+    // Write your code here
+    console.log( formData );
   }
 
   return (
@@ -45,7 +57,7 @@ const ProductAdminPage = ({ product }) => {
       subTitle={`Editando: ${ product.title }`}
       icon={ <DriveFileRenameOutline /> }
     >
-      <form>
+      <form onSubmit={ handleSubmit( onSubmit ) }>
         <Box display='flex' justifyContent='end' sx={{ mb: 1 }}>
           <Button 
             color="secondary"
@@ -65,12 +77,12 @@ const ProductAdminPage = ({ product }) => {
               variant="filled"
               fullWidth 
               sx={{ mb: 1 }}
-              // { ...register('name', {
-              //     required: 'Este campo es requerido',
-              //     minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-              // })}
-              // error={ !!errors.name }
-              // helperText={ errors.name?.message }
+              { ...register('title', {
+                required: 'Este campo es requerido',
+                minLength: { value: 2, message: 'Mínimo 2 caracteres' }
+              })}
+              error={ !!errors.title }
+              helperText={ errors.title?.message }
             />
 
             <TextField
@@ -79,6 +91,11 @@ const ProductAdminPage = ({ product }) => {
               fullWidth 
               multiline
               sx={{ mb: 1 }}
+              { ...register('description', {
+                required: 'Este campo es requerido',
+              })}
+              error={ !!errors.description }
+              helperText={ errors.description?.message }
             />
 
             <TextField
@@ -87,6 +104,12 @@ const ProductAdminPage = ({ product }) => {
               variant="filled"
               fullWidth 
               sx={{ mb: 1 }}
+              { ...register('inStock', {
+                required: 'Este campo es requerido',
+                min: { value: 0, message: 'Mínimo de valor 0' }
+              })}
+              error={ !!errors.inStock }
+              helperText={ errors.inStock?.message }
             />
 
             <TextField
@@ -95,6 +118,12 @@ const ProductAdminPage = ({ product }) => {
               variant="filled"
               fullWidth 
               sx={{ mb: 1 }}
+              { ...register('price', {
+                required: 'Este campo es requerido',
+                min: { value: 0, message: 'Mínimo de valor 0' }
+              })}
+              error={ !!errors.price }
+              helperText={ errors.price?.message }
             />
 
             <Divider sx={{ my: 1 }} />
@@ -160,6 +189,14 @@ const ProductAdminPage = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
+              { ...register('slug', {
+                required: 'Este campo es requerido',
+                validate: ( val ) => val.trim().includes( ' ' )
+                  ? 'No puede tener espacios en blanco'
+                  : undefined
+              })}
+              error={ !!errors.slug }
+              helperText={ errors.slug?.message }
             />
 
             <TextField
