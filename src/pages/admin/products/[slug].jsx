@@ -1,5 +1,5 @@
 // React
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // React Hook Form
 import { useForm } from 'react-hook-form';
 // Material UI
@@ -41,6 +41,8 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 
 const ProductAdminPage = ({ product }) => {
+  const [ newTagValue, setNewTagValue ] = useState( '' );
+
   const {
     register,
     handleSubmit,
@@ -77,8 +79,19 @@ const ProductAdminPage = ({ product }) => {
     setValue( 'sizes', [ ...currentSizes, size ], { shouldValidate: true } );
   }
 
+  const onNewTag = () => {
+    const newTag = newTagValue.trim().toLocaleLowerCase();
+    setNewTagValue( '' );
+    const currentTags = getValues( 'tags' );
+
+    if ( currentTags.includes( newTag ) ) return;
+
+    currentTags.push( newTag );
+  }
+
   const onDeleteTag = ( tag ) => {
-    // Write your code here
+    const updatedTags = getValues( 'tags' ).filter( t => t !== tag );
+    setValue( 'tags', updatedTags, { shouldValidate: true } );
   }
 
   const onSubmit = ( formData ) => {
@@ -247,6 +260,9 @@ const ProductAdminPage = ({ product }) => {
               fullWidth 
               sx={{ mb: 1 }}
               helperText="Presiona [spacebar] para agregar"
+              value={ newTagValue }
+              onChange={ ({ target }) => setNewTagValue( target.value ) }
+              onKeyUp={ ({ code }) => code === 'Space' ? onNewTag() : undefined }
             />
                       
             <Box 
@@ -260,7 +276,7 @@ const ProductAdminPage = ({ product }) => {
               }}
             >
               {
-                product.tags.map((tag) => {
+                getValues( 'tags' ).map((tag) => {
                   return (
                     <Chip
                       key={tag}
