@@ -38,7 +38,14 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 
 const ProductAdminPage = ({ product }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue
+  } = useForm({
     defaultValues: product
   });
 
@@ -47,7 +54,6 @@ const ProductAdminPage = ({ product }) => {
   }
 
   const onSubmit = ( formData ) => {
-    // Write your code here
     console.log( formData );
   }
 
@@ -132,6 +138,8 @@ const ProductAdminPage = ({ product }) => {
               <FormLabel>Tipo</FormLabel>
               <RadioGroup
                 row
+                value={ getValues( 'type' ) }
+                onChange={ ({ target }) => setValue( 'type', target?.value, { shouldValidate: true } ) }
                 // value={ status }
                 // onChange={ onStatusChanged }
               >
@@ -152,6 +160,9 @@ const ProductAdminPage = ({ product }) => {
               <FormLabel>Género</FormLabel>
               <RadioGroup
                 row
+                value={ getValues( 'gender' ) }
+                onChange={ ({ target }) => setValue( 'gender', target?.value, { shouldValidate: true } ) }
+                //{ ...register( 'gender' )}
                 // value={ status }
                 // onChange={ onStatusChanged }
               >
