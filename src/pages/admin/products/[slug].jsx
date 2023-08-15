@@ -38,7 +38,6 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 
 const ProductAdminPage = ({ product }) => {
-
   const {
     register,
     handleSubmit,
@@ -48,6 +47,16 @@ const ProductAdminPage = ({ product }) => {
   } = useForm({
     defaultValues: product
   });
+
+  const onChangeSizes = ( size = '' ) => {
+    const currentSizes = getValues( 'sizes' ) || [];
+
+    if ( currentSizes.includes( size ) ) {
+      return setValue( 'sizes', currentSizes.filter( s => s !== size ), { shouldValidate: true } );
+    }
+
+    setValue( 'sizes', [ ...currentSizes, size ], { shouldValidate: true } );
+  }
 
   const onDeleteTag = ( tag ) => {
     // Write your code here
@@ -185,8 +194,11 @@ const ProductAdminPage = ({ product }) => {
                   validSizes.map(size => (
                     <FormControlLabel
                       key={ size }
-                      control={ <Checkbox /> }
+                      control={
+                        <Checkbox checked={ getValues( 'sizes' ).includes( size ) } /> 
+                      }
                       label={ size } 
+                      onChange={ () => onChangeSizes( size ) }
                     />
                   ))
                 }
