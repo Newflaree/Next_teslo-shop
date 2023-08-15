@@ -1,3 +1,5 @@
+// React
+import { useEffect } from 'react';
 // React Hook Form
 import { useForm } from 'react-hook-form';
 // Material UI
@@ -32,6 +34,7 @@ import { AdminLayout } from '@/components/layouts';
 import { dbProducts } from '@/database';
 
 
+
 const validTypes  = [ 'shirts', 'pants', 'hoodies', 'hats' ];
 const validGender = [ 'men', 'women', 'kid', 'unisex' ];
 const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
@@ -43,10 +46,26 @@ const ProductAdminPage = ({ product }) => {
     handleSubmit,
     formState: { errors },
     getValues,
-    setValue
+    setValue,
+    watch
   } = useForm({
     defaultValues: product
   });
+
+  useEffect( () => {
+    const subscription = watch( ( value, { name, type } ) => {
+      if ( name === 'title' ) {
+        const newSlug = value.title?.trim()
+          .replaceAll( ' ', '_' )
+          .replaceAll( "'", '' )
+          .toLocaleLowerCase() || '';
+
+        setValue( 'slug', newSlug );
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [ watch, setValue ] );
 
   const onChangeSizes = ( size = '' ) => {
     const currentSizes = getValues( 'sizes' ) || [];
