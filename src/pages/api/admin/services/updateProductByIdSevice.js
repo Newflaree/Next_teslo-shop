@@ -21,7 +21,7 @@ const updateProductByIdService = async ( req ) => {
     message: 'El id del producto no es válido'
   }
 
-  if ( images.leght <= 2 ) return {
+  if ( images.leght < 2 ) return {
     statusCode: 400,
     ok: false,
     message: 'Es necesario al menos 2 imágenes'
@@ -40,15 +40,16 @@ const updateProductByIdService = async ( req ) => {
       }
     }
 
+    const updatedProduct = await Product.findByIdAndUpdate( _id, req.body, { new: true } );
+
     // TODO: Eliminar fotos en Cloudinary
 
-    await product.update( req.body );
     await db.disconnect();
 
     return {
       statusCode: 200,
       ok: true,
-      product
+      updatedProduct
     }
   } catch ( error ) {
     await db.disconnect();

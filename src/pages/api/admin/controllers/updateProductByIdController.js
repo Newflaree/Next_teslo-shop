@@ -19,13 +19,13 @@ const updateProductByIdController = async ( req, res ) => {
       statusCode,
       ok,
       message,
-      product
+      updatedProduct
     } = await updateProductByIdSevice( req );
 
     res.status( statusCode ).json({
       ok,
       message,
-      product
+      updatedProduct
     });
   
   } catch ( error ) {

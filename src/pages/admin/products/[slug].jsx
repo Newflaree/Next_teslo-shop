@@ -28,6 +28,8 @@ import {
   SaveOutlined,
   UploadOutlined
 } from '@mui/icons-material';
+// Api
+import { tesloApi } from '@/api';
 // Layouts
 import { AdminLayout } from '@/components/layouts';
 // Database
@@ -42,6 +44,7 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 const ProductAdminPage = ({ product }) => {
   const [ newTagValue, setNewTagValue ] = useState( '' );
+  const [ isSaving, setIsSaving ] = useState( false );
 
   const {
     register,
@@ -94,8 +97,28 @@ const ProductAdminPage = ({ product }) => {
     setValue( 'tags', updatedTags, { shouldValidate: true } );
   }
 
-  const onSubmit = ( formData ) => {
-    console.log( formData );
+  const onSubmit = async ( formData ) => {
+    if ( formData.images.lenght < 2 ) return alert( 'Mínimo 2 imágenes' );
+
+    setIsSaving( true );
+
+    try {
+      const { data } = await tesloApi({
+        url: '/admin/products',
+        method: 'PUT',
+        data: formData
+      })
+
+      console.log({ data });
+      if ( !formData._id ) {
+        // TODO: recargar el navegador
+      } else {
+        setIsSaving( false );
+      }
+    } catch ( error ) {
+      console.log( error );
+      setIsSaving( false );
+    }
   }
 
   return (
@@ -111,6 +134,7 @@ const ProductAdminPage = ({ product }) => {
             startIcon={ <SaveOutlined /> }
             sx={{ width: '150px' }}
             type="submit"
+            disabled={ isSaving }
           >
             Guardar
           </Button>
