@@ -1,5 +1,8 @@
 // Controllers
-import { getAdminProductsController } from './controllers';
+import {
+  getAdminProductsController,
+  updateProductByIdController
+} from './controllers';
 
 
 export default function handler( req, res ) {
@@ -11,7 +14,7 @@ export default function handler( req, res ) {
       return method( req, res );
   
     case 'PUT':
-      return method( req, res );
+      return updateProductByIdController( req, res );
   
     default:
       return res.status( 400 ).json({
