@@ -10,3 +10,4 @@ export { default as getOrdersDetailService } from './getOrdersDetailService';
 export { default as updateUserService } from './updateUserService';
 export { default as getAdminProductsService } from './getAdminProductsService';
 export { default as updateProductByIdSevice } from './updateProductByIdSevice';
+export { default as createProductService } from './createProductService';

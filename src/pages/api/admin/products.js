@@ -1,5 +1,6 @@
 // Controllers
 import {
+  createProductController,
   getAdminProductsController,
   updateProductByIdController
 } from './controllers';
@@ -11,7 +12,7 @@ export default function handler( req, res ) {
       return getAdminProductsController( req, res );
   
     case 'POST':
-      return method( req, res );
+      return createProductController( req, res );
   
     case 'PUT':
       return updateProductByIdController( req, res );
