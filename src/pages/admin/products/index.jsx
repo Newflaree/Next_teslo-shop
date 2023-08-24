@@ -3,10 +3,19 @@ import NextLink from 'next/link';
 // SWR
 import useSWR from 'swr';
 // Material UI
-import { CardMedia, Grid, Link } from '@mui/material';
+import {
+  Box,
+  Button,
+  CardMedia,
+  Grid,
+  Link
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 // Material Icons
-import { CategoryOutlined } from '@mui/icons-material';
+import {
+  AddOutlined,
+  CategoryOutlined
+} from '@mui/icons-material';
 // Layouts
 import { AdminLayout } from '@/components/layouts';
 
@@ -97,6 +106,22 @@ const ProductsPage = () => {
       subTitle='Mantenimiento de productos'
       icon={ <CategoryOutlined /> }
     >
+      <Box
+        display='flex'
+        justifyContent='end'
+        sx={{
+          mb: 2
+        }}
+      >
+        <Button
+          startIcon={ <AddOutlined /> }
+          color='secondary'
+          href='/admin/products/new'
+        >
+          Crear producto
+        </Button>
+      </Box>
+
       <Grid
         container
         className='fadeIn'

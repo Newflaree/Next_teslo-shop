@@ -4,7 +4,8 @@ import mongoose, { Schema, model, models } from 'mongoose';
 const ProductSchema = new Schema({
   description: {
     type: String,
-    required: true
+    required: true,
+    default: ''
   },
   images: [{
     type: String,
@@ -24,33 +25,38 @@ const ProductSchema = new Schema({
     enum: {
       values: [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ],
       message: '{VALEU} no es un tamaño válido'
-    }
+    },
+    default: 'M'
   }],
   slug: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    slug: ''
   },
   tags: [{
     type: String
   }],
   title: {
     type: String,
-    required: true
+    required: true,
+    default: ''
   },
   type: {
     type: String,
     enum: {
       values: [ 'shirts', 'pants', 'hoodies', 'hats' ],
       message: '{VALEU} no es un tipo válido'
-    }
+    },
+    default: 'shirts'
   },
   gender: {
     type: String,
     enum: {
       values: [ 'men', 'women', 'kid', 'unisex' ],
       message: '{VALEU} no es un genero válido'
-    }
+    },
+    default: 'unisex'
   }
 }, {
   timestamps: true

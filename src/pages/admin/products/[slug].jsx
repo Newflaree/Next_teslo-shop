@@ -1,5 +1,7 @@
 // React
 import { useEffect, useState } from 'react';
+// Next.js
+import { useRouter } from 'next/router';
 // React Hook Form
 import { useForm } from 'react-hook-form';
 // Material UI
@@ -32,6 +34,8 @@ import {
 import { tesloApi } from '@/api';
 // Layouts
 import { AdminLayout } from '@/components/layouts';
+// Models
+import { Product } from '@/models';
 // Database
 import { dbProducts } from '@/database';
 
@@ -43,6 +47,7 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 
 const ProductAdminPage = ({ product }) => {
+  const router = useRouter();
   const [ newTagValue, setNewTagValue ] = useState( '' );
   const [ isSaving, setIsSaving ] = useState( false );
 
@@ -105,13 +110,13 @@ const ProductAdminPage = ({ product }) => {
     try {
       const { data } = await tesloApi({
         url: '/admin/products',
-        method: 'PUT',
+        method: formData._id ? 'PUT' : 'POST',
         data: formData
       })
 
-      console.log({ data });
       if ( !formData._id ) {
         // TODO: recargar el navegador
+        router.replace( `/admin/products/${ formData.slug }` )
       } else {
         setIsSaving( false );
       }
@@ -365,7 +370,20 @@ const ProductAdminPage = ({ product }) => {
 
 export const getServerSideProps = async ({ query }) => {
   const { slug = ''} = query;
-  const product = await dbProducts.getProductBySlug( slug.toString() );
+
+  let product;
+
+  if ( slug === 'new' ) {
+    // TODO: Crear un producto
+    const tempProduct = JSON.parse( JSON.stringify( new Product() ) );
+    delete tempProduct._id;
+    tempProduct.images = [ 'img1.jpg', 'img2.jpg' ];
+
+    product = tempProduct;
+
+  } else {
+    product = await dbProducts.getProductBySlug( slug.toString() );
+  }
 
   if ( !product ) {
     return {
