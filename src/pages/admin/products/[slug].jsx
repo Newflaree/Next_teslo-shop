@@ -1,5 +1,9 @@
 // React
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 // Next.js
 import { useRouter } from 'next/router';
 // React Hook Form
@@ -48,6 +52,7 @@ const validSizes = [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ];
 
 const ProductAdminPage = ({ product }) => {
   const router = useRouter();
+  const fileInputRef = useRef( null );
   const [ newTagValue, setNewTagValue ] = useState( '' );
   const [ isSaving, setIsSaving ] = useState( false );
 
@@ -101,9 +106,24 @@ const ProductAdminPage = ({ product }) => {
     const updatedTags = getValues( 'tags' ).filter( t => t !== tag );
     setValue( 'tags', updatedTags, { shouldValidate: true } );
   }
+    
+  const onFilesSelected = ({ target }) => {
+    if ( !target.files || target.files.length === 0 ) {
+      return;
+    }
+
+    try {
+      for ( const file of target.files ) {
+        const formData = new FormData();
+        console.log( file );
+      }
+    } catch ( error ) {
+      console.log({ error });
+    }
+  } 
 
   const onSubmit = async ( formData ) => {
-    if ( formData.images.lenght < 2 ) return alert( 'Mínimo 2 imágenes' );
+    if ( formData.images.length < 2 ) return alert( 'Mínimo 2 imágenes' );
 
     setIsSaving( true );
 
@@ -329,9 +349,21 @@ const ProductAdminPage = ({ product }) => {
                 fullWidth
                 startIcon={ <UploadOutlined /> }
                 sx={{ mb: 3 }}
+                onClick={ () => fileInputRef.current?.click() }
               >
                 Cargar imagen
               </Button>
+
+              <input
+                ref={ fileInputRef }
+                type='file'
+                multiple
+                accept='image/png, image/gif, image/jpeg'
+                style={{
+                  display: 'none'
+                }}
+                onChange={ onFilesSelected }
+              />
 
               <Chip 
                 label="Es necesario al 2 imagenes"
