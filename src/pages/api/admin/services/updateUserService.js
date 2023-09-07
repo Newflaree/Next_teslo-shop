@@ -50,6 +50,7 @@ const updateUserService = async ( req ) => {
     }
 
   } catch ( error ) {
+    await db.disconnect();
     console.log( `${ '[SERVICE.UPDATE-USER]'.bgRed }: ${ error }` );
   }
 }

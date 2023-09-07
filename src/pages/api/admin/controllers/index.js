@@ -5,3 +5,4 @@ export { default as getOrdersDetailController } from './getOrdersDetailControlle
 export { default as getAdminProductsController } from './getAdminProductsController';
 export { default as updateProductByIdController } from './updateProductByIdController';
 export { default as createProductController } from './createProductController';
+export { default as uploadFileController } from './uploadFileController';
