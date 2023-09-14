@@ -1,3 +1,5 @@
+import formidable from 'formidable';
+import fs from 'fs';
 // Database
 import { db } from '@/database';
 // Models
@@ -12,6 +14,7 @@ import { db } from '@/database';
  */
 const uploadFileService = async ( req ) => {
   await parseFiles( req );
+
   try {
     return {
       message: 'uploadFileService'
@@ -28,8 +31,34 @@ export const config = {
   }
 }
 
-const parseFiles = async ( req ) => {
+const saveFile = ( file ) => {
+  const data = fs.readFileSync( file.filepath );
+  fs.writeFileSync( `public/${ file.originalFilename }`, data );
+  fs.unlinkSync( file.filepath );
+  return;
+}
 
+const parseFiles = async ( req ) => {
+  console.log( 'START'.blue );
+  const form = formidable({});
+  console.log( 'END'.blue );
+
+  try {
+    form.parse( req, ( err, fields, files ) => {
+      console.log( 'START'.green );
+      console.log({ err, fields, files });
+      
+      if ( err ) {
+        return false;
+      }
+
+      saveFile( files.file );
+      return true;
+    })
+  
+  } catch ( error ) {
+    console.log( error );
+  }
 }
 
 export default uploadFileService;
